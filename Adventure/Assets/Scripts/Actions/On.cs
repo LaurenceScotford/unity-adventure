@@ -17,6 +17,9 @@ public class On : Action
     private string itemToLight;     // Item player is trying to light
     private string location;        // Current location of player avatar
 
+    private const string LAMP = "2Lantern";
+    private const string URN = "42Urn";
+
     // === CONSTRUCTOR ===
     public On(ActionController actionController)
     {
@@ -55,7 +58,7 @@ public class On : Action
 
         switch (itemToLight)
         {
-            case "2Lantern":
+            case LAMP:
                 if (gameController.LampLife < 0)
                 {
                     // Lamp is out of power
@@ -64,7 +67,7 @@ public class On : Action
                 else
                 {
                     // Turn lamp on
-                    itemController.SetItemState("2Lantern", 1);
+                    itemController.SetItemState(LAMP, 1);
                     onMsg = "39LampOn";
 
                     // If it had been dark, describe the location now there's light to see by
@@ -74,15 +77,15 @@ public class On : Action
                     }
                 }
                 break;
-            case "42Urn":
-                if (itemController.GetItemState("42Urn") == 0)
+            case URN:
+                if (itemController.GetItemState(URN) == 0)
                 {
                     onMsg = "38UrnEmpty";
                 }
                 else
                 {
                     // Light the urn
-                    itemController.SetItemState("42Urn", 2);
+                    itemController.SetItemState(URN, 2);
                     onMsg = "209UrnLit";
                 }
                 break;
@@ -101,17 +104,17 @@ public class On : Action
     {
         string subject = null;
 
-        bool lampHere = playerController.ItemIsPresent("2Lantern");
-        bool urnHere = itemController.ItemIsAt("42Urn", location);
+        bool lampHere = playerController.ItemIsPresent(LAMP);
+        bool urnHere = itemController.ItemIsAt(URN, location);
 
         // If either the lamp or the urn is here (but not both) assume the item that is present
         if (lampHere && !urnHere && gameController.LampLife >= 0)
         {
-            subject = "2Lantern";
+            subject = LAMP;
         } 
         else if (urnHere && !lampHere) 
         {
-            subject = "42Urn";
+            subject = URN;
         }
 
         return subject;
