@@ -7,7 +7,6 @@ public class Off : Action
 
     // References to other parts of game engine
     private ActionController controller;
-    private GameController gameController;
     private ItemController itemController;
     private PlayerController playerController;
     private LocationController locationController;
@@ -18,13 +17,15 @@ public class Off : Action
     private string itemToExtinguish;    // Item the player is trying to extinguish
     private string location;            // Current location of player avatar
 
+    private const string LAMP = "2Lantern";
+    private const string URN = "42Urn";
+
     // === CONSTRUCTOR ===
-    
+
     public Off(ActionController actionController)
     {
         // Get references to other parts of game engine
         controller = actionController;
-        gameController = controller.GC;
         itemController = controller.IC;
         playerController = controller.PC;
         locationController = controller.LC;
@@ -57,9 +58,9 @@ public class Off : Action
 
         switch (itemToExtinguish)
         {
-            case "2Lantern":
+            case LAMP:
                 // Turn the lamp off
-                itemController.SetItemState("2Lantern", 0);
+                itemController.SetItemState(LAMP, 0);
                 offMsg[0]  = "40LampOff";
 
                 //If the location is dark, warn the player about the danger of wandering about in the dark
@@ -68,9 +69,10 @@ public class Off : Action
                     offMsg[1] = "16PitchDark";
                 }
                 break;
-            case "42Urn":
+            case URN:
                 // Turn urn off
-                itemController.SetItemState("42Urn", 1);
+                int urnState = itemController.GetItemState(URN);
+                itemController.SetItemState(URN, urnState == 2 ? 1 : urnState);
                 offMsg[0] = "210UrnDark";
                 break;
             case "31Dragon":
@@ -97,17 +99,17 @@ public class Off : Action
     {
         string subject = null;
 
-        bool lampHere = playerController.ItemIsPresent("2Lantern");
-        bool urnHere = itemController.ItemIsAt("42Urn", location);
+        bool lampHere = playerController.ItemIsPresent(LAMP);
+        bool urnHere = itemController.ItemIsAt(URN, location);
 
         // If either the lamp or the urn is here (but not both)  and is currently lit assume that item
-        if (lampHere && !urnHere && itemController.GetItemState("2Lantern") == 1)
+        if (lampHere && !urnHere && itemController.GetItemState(LAMP) == 1)
         {
-            subject = "2Lantern";
+            subject = LAMP;
         }
-        else if (urnHere && !lampHere && itemController.GetItemState("42Urn") == 2)
+        else if (urnHere && !lampHere && itemController.GetItemState(URN) == 2)
         {
-            subject = "42Urn";
+            subject = URN;
         }
 
         return subject;
