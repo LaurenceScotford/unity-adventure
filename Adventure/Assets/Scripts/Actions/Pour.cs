@@ -17,6 +17,12 @@ public class Pour : Action
     private string liquidInBottle;      // The liquid type currently in the bottle
     private string location;            // The current location of the player avatar
 
+    private const string BOTTLE = "20Bottle"; 
+    private const string WATER = "21Water";
+    private const string OIL = "22Oil";
+    private const string DOOR = "9RustyDoor";
+    private const string PLANT = "24Plant";
+
     // === CONSTRUCTOR ===
 
     public Pour(ActionController actionController)
@@ -43,13 +49,13 @@ public class Pour : Action
         // Determine the liquid in the botttle, if any
         liquidInBottle = null;
 
-        switch (itemController.GetItemState("20Bottle"))
+        switch (itemController.GetItemState(BOTTLE))
         {
             case 0:
-                liquidInBottle = "21Water";
+                liquidInBottle = WATER;
                 break;
             case 2:
-                liquidInBottle = "22Oil";
+                liquidInBottle = OIL;
                 break;
         }
 
@@ -64,7 +70,7 @@ public class Pour : Action
         }
 
         // If the item to pour is the bottle, substitute the liquid, if any
-        if (itemToPour == "20Bottle" && liquidInBottle != null)
+        if (itemToPour == BOTTLE && liquidInBottle != null)
         {
             itemToPour = liquidInBottle;
         }
@@ -80,7 +86,7 @@ public class Pour : Action
         CommandOutcome outcome = CommandOutcome.MESSAGE;
 
         // If the item being poured is not oil or water, object
-        if (itemToPour != "21Water" && itemToPour != "22Oil")
+        if (itemToPour != WATER && itemToPour != OIL)
         {
             pourMsg = "78NoPour";
         }
@@ -97,39 +103,39 @@ public class Pour : Action
             else
             {
                 // Set the bottle to empty and destroy the liquid
-                itemController.SetItemState("20Bottle", 1);
+                itemController.SetItemState(BOTTLE, 1);
                 itemController.DestroyItem(itemToPour);
 
                 // Check for special actions at the rusty door
-                if (itemController.ItemIsAt("9RustyDoor", location))
+                if (itemController.ItemIsAt(DOOR, location))
                 {
-                    if (itemToPour == "22Oil")
+                    if (itemToPour == OIL)
                     {
                         // If oil used, hinges are lubricated
-                        itemController.SetItemState("9RustyDoor", 1);
+                        itemController.SetItemState(DOOR, 1);
                         pourMsg = "114OiledHinges";
                     } 
                     else
                     {
                         // Water is used, so hinges are rusted up
-                        itemController.SetItemState("9RustyDoor", 0);
+                        itemController.SetItemState(DOOR, 0);
                         pourMsg = "113RustyHinges";
                     }
                 }
                 // Check for special actions at plant
-                else if (itemController.ItemIsAt("24Plant", location))
+                else if (itemController.ItemIsAt(PLANT, location))
                 {
-                    if (itemToPour == "21Water")
+                    if (itemToPour == WATER)
                     {
-                        int plantState = itemController.GetItemState("24Plant");
+                        int plantState = itemController.GetItemState(PLANT);
 
                         // Describe what happens to plant
-                        itemController.SetItemState("24Plant", plantState + 3);
-                        textDisplayController.AddTextToLog(itemController.DescribeItem("24Plant"));
+                        itemController.SetItemState(PLANT, plantState + 3);
+                        textDisplayController.AddTextToLog(itemController.DescribeItem(PLANT));
 
                         // Set a new stable state for the plant and the phony plant
                         plantState = (plantState + 1) % 3;
-                        itemController.SetItemState("24Plant", plantState);
+                        itemController.SetItemState(PLANT, plantState);
                         itemController.SetItemState("25PhonyPlant", plantState);
 
                         // Force location to be redescribed
