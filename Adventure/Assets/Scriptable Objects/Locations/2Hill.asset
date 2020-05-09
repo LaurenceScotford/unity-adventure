@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 2Hill
+  m_EditorClassIdentifier: 
+  locationID: 2Hill
+  longDescription: You have walked up a hill, still in the forest. The road slopes
+    back down the other side of the hill. There is a building in the distance.
+  shortDescription: You're at hill in road.
+  locationType: 0
+  isDark: 0
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: ce6b1055a157ef04e908747eb8290e89, type: 2}
+  - {fileID: 11400000, guid: 954d0a5ab710b0a4885744d096023a9b, type: 2}
+  - {fileID: 11400000, guid: ede4daf796d544e48aecc0d5c2e99117, type: 2}
+  - {fileID: 11400000, guid: 735503341ce50724a840c074453dd674, type: 2}
+  - {fileID: 11400000, guid: 1029d22174c7214449d21ff5514e7b4b, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

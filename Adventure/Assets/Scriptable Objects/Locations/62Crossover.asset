@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 62Crossover
+  m_EditorClassIdentifier: 
+  locationID: 62Crossover
+  longDescription: You are at a crossover of a high n/s passage and a low e/w one.
+  shortDescription: 
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 24ced6c4983f8e146b7649490d8cc48f, type: 2}
+  - {fileID: 11400000, guid: 00d46aac3f5653848a48d9be2af8b9dd, type: 2}
+  - {fileID: 11400000, guid: 03d1d00d13c798548b8deca0e3f845d0, type: 2}
+  - {fileID: 11400000, guid: d74fd2d89602ab144bf6d9a99823185b, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

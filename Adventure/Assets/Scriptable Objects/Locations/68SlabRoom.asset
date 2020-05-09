@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 68SlabRoom
+  m_EditorClassIdentifier: 
+  locationID: 68SlabRoom
+  longDescription: "You are in a large low circular chamber whose floor is an immense
+    slab fallen from the ceiling (Slab Room). East and west there once were large
+    passages, but they are now filled with boulders. Low small \rpassages go north
+    and south, and the south one quickly bends west\r around the boulders."
+  shortDescription: You're in Slab Room.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 22bacedfb2397544fa87f008df0ef12f, type: 2}
+  - {fileID: 11400000, guid: 1c2248c301435634787431e024f1e1dc, type: 2}
+  - {fileID: 11400000, guid: ec5cf3d08523f064a9a25a5777f5dfd7, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

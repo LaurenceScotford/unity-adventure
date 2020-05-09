@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 115RepositoryNE
+  m_EditorClassIdentifier: 
+  locationID: 115RepositoryNE
+  longDescription: "You are at the northeast end of an immense room, even larger
+    than the Giant Room. It appears to be a repository for the \"Adventure\" program.
+    Massive torches far overhead bathe the room with smoky yellow light. Scattered
+    about you can be seen a pile of bottles (all\r of them empty), a nursery of young
+    beanstalks murmuring quietly, a bed of oysters, a bundle of black rods with rusty
+    stars on their ends, and a collection of brass lanterns. Off to one side a great
+    many dwarves are sleeping on the floor, snoring loudly. A notice nearby reads:
+    \"Do not disturb the dwarves!\" An immense mirror is hanging against one wall,
+    and stretches to the other end of the room, where various other sundry objects
+    can be glimpsed dimly in the distance."
+  shortDescription: You're at ne end.
+  locationType: 3
+  isDark: 0
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: b0cba7e1f8ab1cc4baf65bdebe549f67, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1
+  sound: 233MurmerSnoreSound
+  drownsOutOtherSounds: 0

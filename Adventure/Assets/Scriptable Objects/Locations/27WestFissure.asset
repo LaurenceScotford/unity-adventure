@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 27WestFissure
+  m_EditorClassIdentifier: 
+  locationID: 27WestFissure
+  longDescription: You are on the west side of the fissure in the Hall of Mists.
+  shortDescription: You're on west bank of fissure.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 776a95fd8b89bf545b6722e728e7792d, type: 2}
+  - {fileID: 11400000, guid: bb0fc6def3fe70a41a8231e7088cada2, type: 2}
+  - {fileID: 11400000, guid: cd81d2a4936ac6949b9764e1d904a65b, type: 2}
+  - {fileID: 11400000, guid: db39ea8fe3138dc40af3c02b65b4f72a, type: 2}
+  - {fileID: 11400000, guid: 9edbe560b716d84418c686d9bbd22c63, type: 2}
+  - {fileID: 11400000, guid: 2b492026459163d43bec4e3592dca6ac, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 116RepositorySW
+  m_EditorClassIdentifier: 
+  locationID: 116RepositorySW
+  longDescription: You are at the southwest end of the repository. To one side is
+    a pit full of fierce green snakes. On the other side is a row of small wicker
+    cages, each of which contains a little sulking bird. In one corner is a bundle
+    of black rods with rusty marks on their ends. A large number of velvet pillows
+    are scattered about on the floor. A vast mirror stretches off to the northeast.
+    At your feet is a large steel grate, next to which is a sign that reads, "Treasure
+    Vault. Keys in main office."
+  shortDescription: You're at sw end.
+  locationType: 3
+  isDark: 0
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: fb2a1908d2268ad4a9e0426c8d6cca0a, type: 2}
+  - {fileID: 11400000, guid: d52d606ee3cd52a4fabdb05527b0366d, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1
+  sound: 234SnakeSound
+  drownsOutOtherSounds: 0

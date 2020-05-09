@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 99Alcove
+  m_EditorClassIdentifier: 
+  locationID: 99Alcove
+  longDescription: You are in an alcove. A small nw path seems to widen after a short
+    distance. An extremely tight tunnel leads east.  It looks like a very tight squeeze.
+    An eerie light can be seen at the other end.
+  shortDescription: You're in alcove.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 23cf21d897cc28340bf93bdc19875b8c, type: 2}
+  - {fileID: 11400000, guid: 7312237ece9d4d144ac42fb3519f019e, type: 2}
+  - {fileID: 11400000, guid: 125225179865eb14db51de1be654d0d2, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59ea6513d4f9ef44ca6943386a4ed159, type: 3}
+  m_Name: 113ReservoirShowMessage52
+  m_EditorClassIdentifier: 
+  travelOptionID: 113ReservoirShowMessage52
+  destination: 
+  messageID: 52NoWayToGo
+  commands:
+  - {fileID: 11400000, guid: 2504a88c931dd284ca9c0fb7dcbc2ecf, type: 2}
+  - {fileID: 11400000, guid: 43d76ceb5aa52f7479664538e166a08c, type: 2}
+  - {fileID: 11400000, guid: 26839fa4c7f454d4696c2a492d9b63f9, type: 2}
+  requiredItem: 45Reservoir
+  forbiddenItemState: 1
+  percentage: 100
+  conditionType: 4

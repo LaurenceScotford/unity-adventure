@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 4Valley
+  m_EditorClassIdentifier: 
+  locationID: 4Valley
+  longDescription: You are in a valley in the forest beside a stream tumbling along
+    a rocky bed.
+  shortDescription: You're in valley.
+  locationType: 0
+  isDark: 0
+  liquidType: 1
+  travelOptions:
+  - {fileID: 11400000, guid: f9391b53b8b769e43b665731582cee7a, type: 2}
+  - {fileID: 11400000, guid: f00d0f40a366ddd4183fdccd0103dd3d, type: 2}
+  - {fileID: 11400000, guid: 0f3dedf415ca5694cb9e3b2191db966f, type: 2}
+  - {fileID: 11400000, guid: 87c05f5540d5a9e41936f134980b57a0, type: 2}
+  - {fileID: 11400000, guid: 7c3739fb8e4040c4991b351da4d6a41a, type: 2}
+  - {fileID: 11400000, guid: dcd7c51674509dc45b4ba4fd05ff0f55, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1
+  sound: 229StreamSound
+  drownsOutOtherSounds: 0

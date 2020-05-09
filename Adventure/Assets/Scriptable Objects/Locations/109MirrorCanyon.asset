@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 109MirrorCanyon
+  m_EditorClassIdentifier: 
+  locationID: 109MirrorCanyon
+  longDescription: "You are in a north/south canyon about 25 feet across. The floor
+    is covered by white mist seeping in from the north. The walls extend\r upward
+    for well over 100 feet.  Suspended from some unseen point far above you, an enormous
+    two-sided mirror is hanging parallel to and midway between the canyon walls.
+    (The mirror is obviously provided for the use of the dwarves who, as you know,
+    are extremely vain.) A\r small window can be seen in either wall, some fifty
+    feet up."
+  shortDescription: You're in Mirror Canyon.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 6748b4a2a315bf34c87b082acdc29135, type: 2}
+  - {fileID: 11400000, guid: f182ed491206a36498f03b3e4d495246, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1
+  sound: 230WindSound
+  drownsOutOtherSounds: 0

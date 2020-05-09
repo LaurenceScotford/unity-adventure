@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f60e071d7f9b20a4ea014468bcdd9382, type: 3}
+  m_Name: 64Chain
+  m_EditorClassIdentifier: 
+  itemID: 64Chain
+  isMovable: 0
+  isTreasure: 1
+  treasurePoints: 16
+  itemName: Golden chain
+  descriptions:
+  - There is a golden chain lying in a heap on the floor!
+  - The bear is locked to the wall with a golden chain!
+  - There is a golden chain locked to the wall!
+  listenOffset: -1
+  readOffset: -1
+  initialLocation: 130BarrenRoom
+  initialLocation2: 

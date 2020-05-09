@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f60e071d7f9b20a4ea014468bcdd9382, type: 3}
+  m_Name: 31Dragon
+  m_EditorClassIdentifier: 
+  itemID: 31Dragon
+  isMovable: 0
+  isTreasure: 0
+  itemName: '*dragon'
+  descriptions:
+  - A huge green fierce dragon bars the way!
+  - The blood-specked body of a huge green dead dragon lies to one side.
+  - The body of a huge green dead dragon is lying off to one side.
+  - Congratulations! You have just vanquished a dragon with your bare hands! (Unbelievable,
+    isn't it?)
+  - The dragon's ominous hissing does not bode well for you.
+  - The dragon is, not surprisingly, silent.
+  - The dragon is, not surprisingly, silent.
+  listenOffset: 4
+  readOffset: -1
+  initialLocation: 119SecretCanyon
+  initialLocation2: 121SecretCanyon

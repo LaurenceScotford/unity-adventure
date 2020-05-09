@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 3Building
+  m_EditorClassIdentifier: 
+  locationID: 3Building
+  longDescription: You are inside a building, a well house for a large spring.
+  shortDescription: You're inside building.
+  locationType: 0
+  isDark: 0
+  liquidType: 1
+  travelOptions:
+  - {fileID: 11400000, guid: 0270985665642da48bae484542d143eb, type: 2}
+  - {fileID: 11400000, guid: b50766d839a5403429d3c134ad852d22, type: 2}
+  - {fileID: 11400000, guid: 6b68752049f0c934abe4eb81e45d853f, type: 2}
+  - {fileID: 11400000, guid: d6bd15cab6bf45549a6515ad72955991, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1
+  sound: 229StreamSound
+  drownsOutOtherSounds: 0

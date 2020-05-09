@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75e558780a6792f4e83de7dbfaae61c1, type: 3}
+  m_Name: 51Help
+  m_EditorClassIdentifier: 
+  messageID: 51Help
+  message: "I know of places, actions, and things. Most of my vocabulary describes
+    places and is used to move you there. To move, try words like forest, building,
+    downstream, enter, east, west, north, south, up, or down.\n\nI know about a few
+    special objects, like a black rod hidden in the cave. These objects can be manipulated
+    using some of the action words that I know. Usually you will need to give both
+    the object and action words (in either order), but sometimes I can infer the
+    object from the verb alone. Some objects also imply verbs; in particular, \"inventory\"
+    implies \"take inventory\", which causes me to give you a list of what you're
+    carrying. Some objects have unexpected effects; the effects are not always desirable!
+    \n\nUsually people having trouble moving just need to try a few more words. Usually
+    people trying unsuccessfully to manipulate an object are attempting something
+    beyond their (or my!) capabilities and should try a completely different tack.
+    One point often confusing to beginners is that, when there are several ways to
+    go in a certain direction (e.g., if there are several holes in a wall), choosing
+    that direction in effect chooses one of the ways at random; often, though, by
+    specifying the place you want to reach you can guarantee choosing the right path.\n\nAlso,
+    to speed the game you can sometimes move long distances with a single word. 
+    For example, \"building\" usually gets you to the building from anywhere above
+    ground except when lost in the forest.  Also, note that cave passages and forest
+    paths turn a lot, so leaving one place heading north doesn't guarantee entering
+    the next from the south.\n\nHowever (another important point), except when you've
+    used a \"long distance\" word such as \"building\", there is always a way to
+    go back where you just came from unless I warn you to the contrary, even though
+    the direction that takes you back might not be the reverse of what got you here.
+    \n\nGood luck, and have fun!"

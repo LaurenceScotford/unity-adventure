@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 124ForkInPath
+  m_EditorClassIdentifier: 
+  locationID: 124ForkInPath
+  longDescription: The path forks here. The left fork leads northeast. A dull rumbling
+    seems to get louder in that direction. The right fork leads southeast down a
+    gentle slope. The main corridor enters from the west.
+  shortDescription: You're at fork in path.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 1d92a7e768166dd4ba66eb11f67c7907, type: 2}
+  - {fileID: 11400000, guid: 2fcee7dfc9dfc564598f8d03d355c97d, type: 2}
+  - {fileID: 11400000, guid: ba1b118d1d1cd1e4dad18fe0d0c447ce, type: 2}
+  - {fileID: 11400000, guid: baff466bd5125d34794fa660ef3c4374, type: 2}
+  - {fileID: 11400000, guid: 3930c1f7742b5c8469f602be94e922a1, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1
+  sound: 235RumblingSound
+  drownsOutOtherSounds: 0

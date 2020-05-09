@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 123LongCorridor
+  m_EditorClassIdentifier: 
+  locationID: 123LongCorridor
+  longDescription: You're in a long east/west corridor. A faint rumbling noise can
+    be heard in the distance.
+  shortDescription: You're in corridor.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 926850608c4981248a3341ec1beec775, type: 2}
+  - {fileID: 11400000, guid: 1728abc7bfcdedb4cb3e8df06308ddb6, type: 2}
+  - {fileID: 11400000, guid: b421b0ff54bf3294d8c0a3f49b411be6, type: 2}
+  - {fileID: 11400000, guid: 977105ba5adacca48af0d9a472292890, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1
+  sound: 235RumblingSound
+  drownsOutOtherSounds: 0

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 118SlopingCorridor
+  m_EditorClassIdentifier: 
+  locationID: 118SlopingCorridor
+  longDescription: You are in a long winding corridor sloping out of sight in both
+    directions.
+  shortDescription: You're in sloping corridor.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 82fa7f6ed7cf2ff488e47eb12ae01205, type: 2}
+  - {fileID: 11400000, guid: b70232ffbf1946c4f8e990c7a0a08963, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

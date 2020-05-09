@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 23TwoPitWest
+  m_EditorClassIdentifier: 
+  locationID: 23TwoPitWest
+  longDescription: "You are at the west end of the Twopit Room. There is a large
+    hole in\r the wall above the pit at this end of the room."
+  shortDescription: You're at west end of Twopit Room.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 153b118839481a8478affe5ee1b7795c, type: 2}
+  - {fileID: 11400000, guid: 3908d4d279d6a964e8868004f60a0336, type: 2}
+  - {fileID: 11400000, guid: 500c1ec948d6e724d82daac744096643, type: 2}
+  - {fileID: 11400000, guid: edf982e1402df824994293392f2fbd82, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

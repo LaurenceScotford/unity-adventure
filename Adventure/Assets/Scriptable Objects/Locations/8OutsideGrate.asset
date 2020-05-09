@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 8OutsideGrate
+  m_EditorClassIdentifier: 
+  locationID: 8OutsideGrate
+  longDescription: You are in a 20-foot depression floored with bare dirt. Set into
+    the dirt is a strong steel grate mounted in concrete. A dry streambed leads into
+    the depression.
+  shortDescription: You're outside grate.
+  locationType: 0
+  isDark: 0
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: f6160e807a6fec94d89302db514056f2, type: 2}
+  - {fileID: 11400000, guid: 4da105cdc6dd4bc4d9bc512076bf4225, type: 2}
+  - {fileID: 11400000, guid: 07930e9ad221fc84581e3d226bf49f56, type: 2}
+  - {fileID: 11400000, guid: d8deb14a8d179354c8c610bb215af22a, type: 2}
+  - {fileID: 11400000, guid: 4c2630d1ffc974a47846969f13caf03d, type: 2}
+  - {fileID: 11400000, guid: 28012c8915e78704b939f6ab5606496c, type: 2}
+  - {fileID: 11400000, guid: 482ed76b0a6642a4cbaf72990495670b, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

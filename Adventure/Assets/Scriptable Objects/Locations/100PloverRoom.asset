@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 100PloverRoom
+  m_EditorClassIdentifier: 
+  locationID: 100PloverRoom
+  longDescription: You're in a small chamber lit by an eerie green light. An extremely
+    narrow tunnel exits to the west. A dark corridor leads ne.
+  shortDescription: You're in Plover Room.
+  locationType: 3
+  isDark: 0
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: beca9113100112e409d69b5c110c8fbf, type: 2}
+  - {fileID: 11400000, guid: 0405d310a25543948874632bbc4f2609, type: 2}
+  - {fileID: 11400000, guid: de5d0147b9855cc40b9f18ae0babbbc6, type: 2}
+  - {fileID: 11400000, guid: 36b1a06aa7a317a408cef0a6bcf35ed8, type: 2}
+  - {fileID: 11400000, guid: 7bceba40aca9c7b49a58ea5f82887913, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

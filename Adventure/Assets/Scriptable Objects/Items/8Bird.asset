@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f60e071d7f9b20a4ea014468bcdd9382, type: 3}
+  m_Name: 8Bird
+  m_EditorClassIdentifier: 
+  itemID: 8Bird
+  isMovable: 1
+  isTreasure: 0
+  itemName: Little bird in cage
+  descriptions:
+  - A cheerful little bird is sitting here singing.
+  - There is a little bird in the cage.
+  - A cheerful little bird is sitting here singing.
+  - The bird's singing is quite melodious.
+  - The bird does not seem inclined to sing while in the cage.
+  - 'It almost seems as though the bird is trying to tell you something. '
+  - 'To your surprise, you can understand the bird''s chirping; it is singing about
+    the joys of its forest home. '
+  - The bird does not seem inclined to sing while in the cage.
+  - 'The bird is singing to you in gratitude for your having returned it to its home.
+    In return, it informs you of a magic word which it thinks you may find useful
+    somewhere near the Hall of Mists. The magic word changes frequently, but for
+    now the bird believes it is "~". You thank the bird for this information, and
+    it flies off into the forest. '
+  listenOffset: 3
+  readOffset: -1
+  initialLocation: 13BirdChamber
+  initialLocation2: 

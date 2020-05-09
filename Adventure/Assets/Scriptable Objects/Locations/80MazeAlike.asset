@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 80MazeAlike
+  m_EditorClassIdentifier: 
+  locationID: 80MazeAlike
+  longDescription: You are in a maze of twisty little passages, all alike.
+  shortDescription: 
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 4f1236f3ba88dc94a94ebcaa662aa76e, type: 2}
+  - {fileID: 11400000, guid: e7df7abcd561d1748b0ee49d193b83ef, type: 2}
+  - {fileID: 11400000, guid: 28ba70210583c674e8b15ef94ebca233, type: 2}
+  - {fileID: 11400000, guid: 20086bb9d044bc047b0eded8feedeb7f, type: 2}
+  travelIsForced: 0
+  canMoveBack: 0

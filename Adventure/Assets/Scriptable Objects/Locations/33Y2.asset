@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 33Y2
+  m_EditorClassIdentifier: 
+  locationID: 33Y2
+  longDescription: You are in a large room, with a passage to the south, a passage
+    to the west, and a wall of broken rock to the east. There is a large "Y2" on
+    a rock in the room's center.
+  shortDescription: You're at "Y2".
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: a868945d2849f614bab20918ef03fd34, type: 2}
+  - {fileID: 11400000, guid: 901ae63140e4a0f47af1f43d67ff81f5, type: 2}
+  - {fileID: 11400000, guid: 06dd991ee62943f43bf21bc62c6780a2, type: 2}
+  - {fileID: 11400000, guid: 6eb73cf29ab0c7a48a6a9e10ebcf97e4, type: 2}
+  - {fileID: 11400000, guid: d5fce102786e8a940b7a636352c24993, type: 2}
+  - {fileID: 11400000, guid: 7c888fe4f39fbd64f9e2191eea105ee8, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

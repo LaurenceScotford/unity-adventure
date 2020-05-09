@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 11DebrisRoom
+  m_EditorClassIdentifier: 
+  locationID: 11DebrisRoom
+  longDescription: "You are in a debris room filled with stuff washed in from the
+    surface. \n\nA low wide passage with cobbles becomes plugged with mud and debris
+    here, but an awkward canyon leads upward and west. \n\nIn the mud someone has
+    scrawled, \"MAGIC WORD XYZZY\"."
+  shortDescription: You're in debris room.
+  locationType: 2
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 29b0b96ee561eac419c02eaa42219ec3, type: 2}
+  - {fileID: 11400000, guid: c7415f2d74cebca4fbe7e5a1e86a8a69, type: 2}
+  - {fileID: 11400000, guid: 62479c6d60aea704cbcb46141be40342, type: 2}
+  - {fileID: 11400000, guid: 8770d5f3b015ef848bb8339281ab1215, type: 2}
+  - {fileID: 11400000, guid: e5c8f2c2ac385c14a977a28f4d234ac1, type: 2}
+  - {fileID: 11400000, guid: 4207650386eab76498962ed54d6b5d04, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

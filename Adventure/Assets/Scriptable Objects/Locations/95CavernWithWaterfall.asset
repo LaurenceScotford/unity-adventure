@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 95CavernWithWaterfall
+  m_EditorClassIdentifier: 
+  locationID: 95CavernWithWaterfall
+  longDescription: You are in a magnificent cavern with a rushing stream, which cascades
+    over a sparkling waterfall into a roaring whirlpool which disappears through
+    a hole in the floor. Passages exit to the south and west.
+  shortDescription: You're in cavern with waterfall.
+  locationType: 3
+  isDark: 1
+  liquidType: 1
+  travelOptions:
+  - {fileID: 11400000, guid: d7327e4bf4eb9c547851012074c54d71, type: 2}
+  - {fileID: 11400000, guid: 7eda093991ee9ea4ba71aa0a24d07010, type: 2}
+  - {fileID: 11400000, guid: 7d23e9cbb11edbe4399bebdadad2135c, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1
+  sound: 231PoolSound
+  drownsOutOtherSounds: 0

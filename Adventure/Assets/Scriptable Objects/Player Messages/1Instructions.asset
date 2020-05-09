@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75e558780a6792f4e83de7dbfaae61c1, type: 3}
+  m_Name: 1Instructions
+  m_EditorClassIdentifier: 
+  messageID: 1Instructions
+  message: 'Somewhere nearby is Colossal Cave, where others have found fortunes in
+    treasure and gold, though it is rumored that some who enter are never seen again.
+    Magic is said to work in the cave.
+
+
+    I will be your eyes and hands. Direct
+    me with commands of 1 or 2 words. I should warn you that I look at only the first
+    five letters of each word, so you''ll have to enter "northeast" as "ne" to distinguish
+    it from "north".
+
+
+    You can type "help" for some general hints. For information
+    on how to end your adventure, scoring, etc., type "info".
+
+
+    This program
+    was originally developed by Willie Crowther. Most of the features of the current
+    program were added by Don Woods. This conversion of Adventure 2.5 (Don Wood''s
+    430 point version) to Unity is by Laurence Scotford.'

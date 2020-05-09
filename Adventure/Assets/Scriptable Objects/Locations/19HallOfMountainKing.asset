@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 19HallOfMountainKing
+  m_EditorClassIdentifier: 
+  locationID: 19HallOfMountainKing
+  longDescription: You are in the Hall of the Mountain King, with passages off in
+    all directions.
+  shortDescription: You're in Hall of Mt King.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 256bf4c2f8d9c8041a6297b90b58eb28, type: 2}
+  - {fileID: 11400000, guid: 7456bae6e4d0f3249ac20258644dcbae, type: 2}
+  - {fileID: 11400000, guid: 51a3505227ce14342acbb48b247ee0f1, type: 2}
+  - {fileID: 11400000, guid: 9039ae252646c294a9bada94cbc4917f, type: 2}
+  - {fileID: 11400000, guid: 5df72707a735e0b438a3be2becaf996f, type: 2}
+  - {fileID: 11400000, guid: efec0b42b89ad3449994d4406be271f2, type: 2}
+  - {fileID: 11400000, guid: f3a3b568267ec5945a92c7c351f7eb9c, type: 2}
+  - {fileID: 11400000, guid: 28ab6bf4c29b980458e80075cac3cdd7, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1
+  sound: 
+  drownsOutOtherSounds: 0

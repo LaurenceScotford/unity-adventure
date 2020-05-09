@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 72LargeLowRoom
+  m_EditorClassIdentifier: 
+  locationID: 72LargeLowRoom
+  longDescription: You are in a large low room. Crawls lead north, se, and sw.
+  shortDescription: You're in large low room.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: a2e942128b1f4c24ba0bfd60444d8fde, type: 2}
+  - {fileID: 11400000, guid: 83a5a77f471c11644912d57a97cc48f9, type: 2}
+  - {fileID: 11400000, guid: 87846d19265cc654cb38adfa8159d7cf, type: 2}
+  - {fileID: 11400000, guid: 4b2cd2b7b5664dc4087005f4e39e49a6, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

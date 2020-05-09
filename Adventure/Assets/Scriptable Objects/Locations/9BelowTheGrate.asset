@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 9BelowTheGrate
+  m_EditorClassIdentifier: 
+  locationID: 9BelowTheGrate
+  longDescription: You are in a small chamber beneath a 3x3 steel grate to the surface.
+    A low crawl over cobbles leads inward to the west.
+  shortDescription: You're below the grate.
+  locationType: 2
+  isDark: 0
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: bb63ecdad5929854a9a699893c6d03df, type: 2}
+  - {fileID: 11400000, guid: 2db1e315e71fcc440be3d2f3d50a0a1c, type: 2}
+  - {fileID: 11400000, guid: 0134a211a9fd921499f0ac56985608f9, type: 2}
+  - {fileID: 11400000, guid: 0db1be610011ccd4489e632c7a314f4e, type: 2}
+  - {fileID: 11400000, guid: 9140c1cfe8188844b992fcc9e113deba, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

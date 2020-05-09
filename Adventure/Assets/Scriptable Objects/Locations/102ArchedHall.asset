@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 102ArchedHall
+  m_EditorClassIdentifier: 
+  locationID: 102ArchedHall
+  longDescription: You are in an arched hall. A coral passage once continued up and
+    east from here, but is now blocked by debris. The air smells of sea water.
+  shortDescription: You're in arched hall.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 7a15af40b02e3a44aa91bdaea6bef7a5, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

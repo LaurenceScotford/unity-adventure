@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 65Bedquilt
+  m_EditorClassIdentifier: 
+  locationID: 65Bedquilt
+  longDescription: You are in Bedquilt, a long east/west passage with holes everywhere.
+    To explore at random select north, south, up, or down.
+  shortDescription: You're in Bedquilt.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: d81445a5605efe941a177bc1d1813586, type: 2}
+  - {fileID: 11400000, guid: aa2b11e819679b5428d5c6f43bada4c7, type: 2}
+  - {fileID: 11400000, guid: b16729e36d6828a4db58e611bc1ed10e, type: 2}
+  - {fileID: 11400000, guid: 0ab920850d8ac2047a431518f1fb0df9, type: 2}
+  - {fileID: 11400000, guid: d8ea632aae6810040be976a04c32f575, type: 2}
+  - {fileID: 11400000, guid: 0db5ab3c7dda6244c849e11267bb6a18, type: 2}
+  - {fileID: 11400000, guid: 0f4b591ca3fc949478d0ebf94371e7dd, type: 2}
+  - {fileID: 11400000, guid: 99255a712c19b7143a6021cb3a50a93a, type: 2}
+  - {fileID: 11400000, guid: 42a46c44f3217db42bcc9fd44a8d058c, type: 2}
+  - {fileID: 11400000, guid: 4470285f21fd69442b42024dd750dcf3, type: 2}
+  - {fileID: 11400000, guid: 645975e821cc3c543acea0b8d24baba6, type: 2}
+  - {fileID: 11400000, guid: 553ecb0c75e03b740ae36ed6bfcf476f, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

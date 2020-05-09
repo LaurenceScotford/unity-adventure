@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 15HallOfMists
+  m_EditorClassIdentifier: 
+  locationID: 15HallOfMists
+  longDescription: You are at one end of a vast hall stretching forward out of sight
+    to the west. There are openings to either side. Nearby, a wide stone staircase
+    leads downward. The hall is filled with wisps of white mist swaying to and fro
+    almost as if alive. A cold wind blows up the staircase. There is a passage at
+    the top of a dome behind you.
+  shortDescription: You're in Hall of Mists.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 65203922f0f2706429acdfb055e86890, type: 2}
+  - {fileID: 11400000, guid: 595c095c418387a4dad52a03fa7b42ec, type: 2}
+  - {fileID: 11400000, guid: 0c3aef4f1866c054db038b6a003a93b9, type: 2}
+  - {fileID: 11400000, guid: 72e0dce06004a594b9252fd3fa3ceda7, type: 2}
+  - {fileID: 11400000, guid: 4cf88f99e92e3c144bff53b273f327f1, type: 2}
+  - {fileID: 11400000, guid: 9c0c09373bc4b56478e8a7a0452bbec1, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1
+  sound: 230WindSound
+  drownsOutOtherSounds: 0

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 127ChamberOfBoulders
+  m_EditorClassIdentifier: 
+  locationID: 127ChamberOfBoulders
+  longDescription: You are in a small chamber filled with large boulders. The walls
+    are very warm, causing the air in the room to be almost stifling from the heat.
+    The only exit is a crawl heading west, through which is coming a low rumbling.
+  shortDescription: You're in Chamber of Boulders.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 6f4aa12e22fbd694185691ef4f4df018, type: 2}
+  - {fileID: 11400000, guid: fc71cfa4c6907c04a8a915a3d0682363, type: 2}
+  - {fileID: 11400000, guid: f3adbd6f75a391b449e3faf5d607a3c4, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1
+  sound: 235RumblingSound
+  drownsOutOtherSounds: 0

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 134MazeDifferent
+  m_EditorClassIdentifier: 
+  locationID: 134MazeDifferent
+  longDescription: You are in a twisting little maze of passages, all different.
+  shortDescription: 
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 6188b95f535c1c0489f90030463b940e, type: 2}
+  - {fileID: 11400000, guid: a40782f3ae1000645a6c1da264216521, type: 2}
+  - {fileID: 11400000, guid: ac97cb6f2618ca743b28882a8cfa7b1f, type: 2}
+  - {fileID: 11400000, guid: 58debe03c6a37db49a33ef49ef3bf06c, type: 2}
+  - {fileID: 11400000, guid: 7d8dc7a1f6f9fb44fb77a6e7c21970c1, type: 2}
+  - {fileID: 11400000, guid: f0b9bd6d1fbe1b84795b67b2c6d9ab93, type: 2}
+  - {fileID: 11400000, guid: df9c1de47993d46429fa15527f4e7ddf, type: 2}
+  - {fileID: 11400000, guid: 5f65dd9633a59ad4691f59c4415a888d, type: 2}
+  - {fileID: 11400000, guid: 299b3ffb8c84e054496b8be6f3217183, type: 2}
+  - {fileID: 11400000, guid: 41d8fa505a379274f8143812f9892bd6, type: 2}
+  travelIsForced: 0
+  canMoveBack: 0

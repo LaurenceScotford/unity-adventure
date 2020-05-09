@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 167Ledge
+  m_EditorClassIdentifier: 
+  locationID: 167Ledge
+  longDescription: You are on a small ledge on one face of a sheer cliff. There are
+    no paths away from the ledge. Across the chasm is a small clearing surrounded
+    by forest.
+  shortDescription: You're on ledge.
+  locationType: 0
+  isDark: 0
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 1d88db2edf7b06446bf0280cbfa921ba, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1
+  sound: 
+  drownsOutOtherSounds: 0

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 66SwissCheeseRoom
+  m_EditorClassIdentifier: 
+  locationID: 66SwissCheeseRoom
+  longDescription: You are in a room whose walls resemble swiss cheese. Obvious passages
+    go west, east, ne, and nw. Part of the room is occupied by a large bedrock block.
+  shortDescription: You're in Swiss Cheese Room.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: edb82d94b503f854b84424ae1b6d0d96, type: 2}
+  - {fileID: 11400000, guid: 8c991fe5ce5dff84e846692613e96691, type: 2}
+  - {fileID: 11400000, guid: 1187ff8d04fbaee449bab690d7e051fc, type: 2}
+  - {fileID: 11400000, guid: 98a70e36c4c65394599efd13eded3108, type: 2}
+  - {fileID: 11400000, guid: 730e3b2feaf87cc42ab4d225dbada90d, type: 2}
+  - {fileID: 11400000, guid: b7745db5b554da54eac1c465fe35e18b, type: 2}
+  - {fileID: 11400000, guid: b75c98b0bdcd9db4d9336b7608c20da0, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

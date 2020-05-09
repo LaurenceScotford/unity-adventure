@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75e558780a6792f4e83de7dbfaae61c1, type: 3}
+  m_Name: 275News
+  m_EditorClassIdentifier: 
+  messageID: 275News
+  message: "Version 2.5 is essentially the same as Version II; the cave and the hazards
+    therein are unchanged, and top score is still 430 points. There are a few more
+    hints, especially for some of the more obscure puzzles. There are a few minor
+    bugfixes and cosmetic changes. You\r can now save a game and resume it at once
+    (formerly you had to wait a while first), but it now costs you a few points each
+    time you save the game. Saved games are now stored in much smaller files than
+    before.\n\nNOTE from Laurence Scotford: The original note above has been included
+    here for historic interest, but the information about bug fixes and save files
+    doesn't apply to this recreation of the original game.\n"

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 117ChasmSW
+  m_EditorClassIdentifier: 
+  locationID: 117ChasmSW
+  longDescription: You are on one side of a large, deep chasm. A heavy white mist
+    rising up from below obscures all view of the far side. A sw path leads away
+    from the chasm into a winding corridor.
+  shortDescription: You're on sw side of chasm.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 0aa8c81ab866ff84dbda8f2a93b8c628, type: 2}
+  - {fileID: 11400000, guid: fc2542a652fd24245a5164d5f115ff4d, type: 2}
+  - {fileID: 11400000, guid: 2e0454875b92dc94286f36a2b8189d76, type: 2}
+  - {fileID: 11400000, guid: c98670a6baface64f98aaa204232e8c2, type: 2}
+  - {fileID: 11400000, guid: fa1b4da018b662e47b436cebea506a2a, type: 2}
+  - {fileID: 11400000, guid: 685abf2966ec26c4b80d683dc2025922, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

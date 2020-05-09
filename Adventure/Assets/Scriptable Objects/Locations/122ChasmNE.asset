@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 122ChasmNE
+  m_EditorClassIdentifier: 
+  locationID: 122ChasmNE
+  longDescription: You are on the far side of the chasm. A ne path leads away from
+    the chasm on this side.
+  shortDescription: You're on ne side of chasm.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: cc0f4ee66956e7743b09da03b0a3b686, type: 2}
+  - {fileID: 11400000, guid: efd410711b08ead45ba2884d85c5286e, type: 2}
+  - {fileID: 11400000, guid: f134e23c1ffbcd74f96dddd1fe8c52ed, type: 2}
+  - {fileID: 11400000, guid: a31db5bf9f7625349be17b4bc8fb9ced, type: 2}
+  - {fileID: 11400000, guid: e2c3499800f37b54dba871fc083620af, type: 2}
+  - {fileID: 11400000, guid: 8dca13ef9be3f444e9a5f4762fd4c2b0, type: 2}
+  - {fileID: 11400000, guid: 1671cc29bb5f20543adae21ec3ac3997, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

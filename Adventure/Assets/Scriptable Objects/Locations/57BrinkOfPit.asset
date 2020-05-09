@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 57BrinkOfPit
+  m_EditorClassIdentifier: 
+  locationID: 57BrinkOfPit
+  longDescription: You are on the brink of a thirty foot pit with a massive orange
+    column down one wall. You could climb down here but you could not get back up.
+    The maze continues at this level.
+  shortDescription: You're at brink of pit.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 8a37fd7fc828aa84db068e78e7973812, type: 2}
+  - {fileID: 11400000, guid: 17b7fe6efabd16b4ba35e9a7b32453a6, type: 2}
+  - {fileID: 11400000, guid: e975fcaae0d84884fa8228950d53567e, type: 2}
+  - {fileID: 11400000, guid: f0c713c881b3dec4aa27b3a9b03e5676, type: 2}
+  - {fileID: 11400000, guid: 42e6a342f1fa5c7448b7e736419263ac, type: 2}
+  travelIsForced: 0
+  canMoveBack: 0

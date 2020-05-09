@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 111Stalactite
+  m_EditorClassIdentifier: 
+  locationID: 111Stalactite
+  longDescription: A large stalactite extends from the roof and almost reaches the
+    floor below. You could climb down it, and jump from it to the floor, but having
+    done so you would be unable to reach it to climb back up.
+  shortDescription: You're at top of stalactite.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 0623979bac29b6a458fd4d9a9fd8e2c2, type: 2}
+  - {fileID: 11400000, guid: 0040e5f597f80014ebb3598595dd3a4b, type: 2}
+  - {fileID: 11400000, guid: b6fcd7cd1b309ae429204061925aa361, type: 2}
+  - {fileID: 11400000, guid: 38dd43dbfec33f1409ca652945586ac8, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 97OrientalRoom
+  m_EditorClassIdentifier: 
+  locationID: 97OrientalRoom
+  longDescription: This is the Oriental Room. Ancient oriental cave drawings cover
+    the walls. A gently sloping passage leads upward to the north, another passage
+    leads se, and a hands and knees crawl leads west.
+  shortDescription: You're in Oriental Room.
+  locationType: 3
+  isDark: 1
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: 820e448c2b7fe7f4492836b057c07339, type: 2}
+  - {fileID: 11400000, guid: 7b862c618f127204f97bb7fb939d787a, type: 2}
+  - {fileID: 11400000, guid: 294df90e04b755041844bb96b1e4e9a2, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1

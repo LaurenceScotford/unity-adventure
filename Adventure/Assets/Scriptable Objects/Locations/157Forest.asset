@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 157Forest
+  m_EditorClassIdentifier: 
+  locationID: 157Forest
+  longDescription: You are wandering aimlessly through the forest.
+  shortDescription: 
+  locationType: 1
+  isDark: 0
+  liquidType: 0
+  travelOptions:
+  - {fileID: 11400000, guid: f0b9046a982a55141bd77fc193b6debb, type: 2}
+  - {fileID: 11400000, guid: 78ed72e817828df4d86713ef2c3567d5, type: 2}
+  - {fileID: 11400000, guid: 75be1efe4348e9f498d36430f6cded04, type: 2}
+  - {fileID: 11400000, guid: d5ca52fa03f56204bbb862269cfc38e0, type: 2}
+  travelIsForced: 0
+  canMoveBack: 0

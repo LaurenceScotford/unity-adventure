@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d12173b932c9dc4eb2f13e0baa7303e, type: 3}
+  m_Name: 38BottomOfPitWithStream
+  m_EditorClassIdentifier: 
+  locationID: 38BottomOfPitWithStream
+  longDescription: You are in the bottom of a small pit with a little stream, which
+    enters and exits through tiny slits.
+  shortDescription: You're at bottom of pit with stream.
+  locationType: 3
+  isDark: 1
+  liquidType: 1
+  travelOptions:
+  - {fileID: 11400000, guid: 3346e0eba7391ac41b9ac38516a4e235, type: 2}
+  - {fileID: 11400000, guid: 779ffb4f9727a484092101f99bb15cac, type: 2}
+  travelIsForced: 0
+  canMoveBack: 1
+  sound: 229StreamSound
+  drownsOutOtherSounds: 0

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f60e071d7f9b20a4ea014468bcdd9382, type: 3}
+  m_Name: 24Plant
+  m_EditorClassIdentifier: 
+  itemID: 24Plant
+  isMovable: 0
+  isTreasure: 0
+  itemName: '*plant'
+  descriptions:
+  - There is a tiny little plant in the pit, murmuring "water, water, ..."
+  - There is a 12-foot-tall beanstalk stretching up out of the pit, bellowing "WATER!!
+    WATER!!"
+  - There is a gigantic beanstalk stretching all the way up to the hole.
+  - The plant spurts into furious growth for a few seconds.
+  - The plant grows explosively, almost filling the bottom of the pit.
+  - You've over-watered the plant! It's shriveling up! And now . . .
+  - The plant continues to ask plaintively for water.
+  - The plant continues to demand water.
+  - The plant now maintains a contented silence.
+  listenOffset: 6
+  readOffset: -1
+  initialLocation: 25WestPit
+  initialLocation2: 
