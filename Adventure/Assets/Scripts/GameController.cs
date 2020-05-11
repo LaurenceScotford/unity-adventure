@@ -81,7 +81,13 @@ public class GameController : MonoBehaviour
     public void EndGame(bool isQuitting)
     {
         SuspendCommandProcessing();
-        scoreController.DisplayScore(isQuitting ? ScoreMode.QUITTING : ScoreMode.ENDING);
+
+        if (!isQuitting)
+        {
+            scoreController.ReachedEnd = true;
+        }
+
+        scoreController.DisplayScore(ScoreMode.FINAL);
         CurrentGameStatus = GameStatus.OVER;
         textDisplayController.AddTextToLog(playerMessageController.GetMessage("201GameOver"));
         ResumeCommandProcessing();
@@ -199,11 +205,17 @@ public class GameController : MonoBehaviour
 
             if (currentCommands.Contains("2031Resume"))
             {
-                actionController.ExecuteAction("2031Resume");
+                actionController.ExecuteAction("resume");
+            }
+            else if (currentCommands.Contains("2024Score"))
+            {
+                scoreController.DisplayScore(ScoreMode.FINAL);
+                ResumeCommandProcessing();
             }
             else
             {
                 textDisplayController.AddTextToLog(playerMessageController.GetMessage("201GameOver"));
+                ResumeCommandProcessing();
             }
         }
     }

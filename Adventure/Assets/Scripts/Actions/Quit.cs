@@ -20,15 +20,12 @@ public class Quit : Action
         parserState = controller.PS;
         gameController = controller.GC;
         questionController = controller.QC;
-
-        // Define behaviour for getting a subject
-        subjectOptional = true;
     }
 
     public override CommandOutcome DoAction()
     {
-        // If player tried to supply a subject, force default message
-        if (controller.GetSubject("quit") != null)
+        // If player tried to use a second word, force default message
+        if (parserState.GetOtherWordText() != null)
         {
             parserState.CurrentCommandState = CommandState.DISCARDED;
             return CommandOutcome.NO_COMMAND;
@@ -40,7 +37,7 @@ public class Quit : Action
         return CommandOutcome.QUESTION;
     }
 
-    // No substitutes for this command
+    // Not used for this command
     public override string FindSubstituteSubject()
     {
         return null;

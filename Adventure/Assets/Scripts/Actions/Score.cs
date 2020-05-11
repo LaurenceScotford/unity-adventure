@@ -34,7 +34,7 @@ public class Score : Action
             return CommandOutcome.NO_COMMAND;
         }
 
-        scoreController.DisplayScore(ScoreMode.SCORING);
+        scoreController.DisplayScore(ScoreMode.INTERIM);
         parserState.CommandComplete();
         return CommandOutcome.MESSAGE;
     }

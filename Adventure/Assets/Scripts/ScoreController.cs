@@ -55,6 +55,7 @@ public class ScoreController : MonoBehaviour
     public int SavePenaltyPoints { get; set; }  // keeps track of points spent on saving game
     public int ThresholdIndex { get; set; }     // Index of next turn threshold
     public int TurnsPointsLost { get; set; }    // Keeps track of points lost for using too many turns
+    public bool ReachedEnd { get; set; }        // Whether the player reached the end of the game
 
     // === PUBLIC METHODS ===
 
@@ -82,7 +83,7 @@ public class ScoreController : MonoBehaviour
         }
     }
 
-    // Calculates and displays the player's current score. isFFinal should be true if this is a final score
+    // Calculates and displays the player's current score. isFinal should be true if this is a final score
     public void DisplayScore(ScoreMode scoreMode)
     {
         mode = scoreMode; 
@@ -102,7 +103,7 @@ public class ScoreController : MonoBehaviour
         string[] ScoreMsgParams = new string[] { score.ToString(), maxScore.ToString(), gameController.Turns.ToString(), gameController.Turns != 1 ? "s" : "" };
 
         // Now report the score in a format based on the mode
-        if (mode == ScoreMode.SCORING)
+        if (mode == ScoreMode.INTERIM)
         {
             // For interim score, just show the current score
             textDisplayController.AddTextToLog(playerMessageController.GetMessage("259Score", ScoreMsgParams));
@@ -202,7 +203,7 @@ public class ScoreController : MonoBehaviour
 
         // Add points for reaching end of game, i.e. not quitting
         maxScore += 4;
-        if (mode == ScoreMode.ENDING)
+        if (ReachedEnd)
         {
             score += 4;
         }
@@ -300,5 +301,5 @@ public struct RankThreshold
     }
 }
 
-// The scoring mode SCORING = interim score, QUITTING = score after quitting the game, ENDING = score after game ended
-public enum ScoreMode { SCORING, QUITTING, ENDING }
+// The scoring mode INTERIM = interim score, FINAL = score after game ended
+public enum ScoreMode { INTERIM, FINAL }
