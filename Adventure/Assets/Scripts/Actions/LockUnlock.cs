@@ -41,7 +41,7 @@ public class LockUnlock : Action
     public override CommandOutcome DoAction()
     {
         location = playerController.CurrentLocation;
-        locking = parserState.ActiveCommand.CommandID == "2006Lock";
+        locking = parserState.ActiveCommand == "2006Lock";
 
         // Check whether a subject was identified, or could be identified 
         noSubjectMsg = new NoSubjectMsg("257VerbWhat", parserState.Words);

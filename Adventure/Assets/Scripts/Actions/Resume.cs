@@ -1,6 +1,10 @@
 ﻿// Resume
 // Executes RESUME command
 
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine;
+
 public class Resume : Action
 {
     // === MEMBER VARIABLES ===
@@ -70,12 +74,20 @@ public class Resume : Action
     // Handler for yes reponse to resume question
     public void YesResume()
     {
-        // TO DO: Resume the game
+       // TO DO: Resume game
+
     }
 
     // Handler for no response to resume question
     public void NoDontResume()
     {
-        gameController.ProcessTurn(CommandOutcome.DESCRIBE);
+        if (gameController.CurrentGameStatus == GameStatus.PLAYING)
+        {
+            gameController.ProcessTurn(CommandOutcome.DESCRIBE);
+        }
+        else
+        {
+            gameController.ResumeCommandProcessing();
+        }
     }
 }

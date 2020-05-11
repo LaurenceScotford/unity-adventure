@@ -15,8 +15,7 @@ public class DwarfController : MonoBehaviour
     [SerializeField] private TextDisplayController textDisplayController;
     [SerializeField] private PlayerMessageController playerMessageController;
 
-    private Dwarf[] dwarves;        // Array holding the dwarves
-    /*
+     /*
      * Dwarf activation levels:
      * 0 - Dwarves not yet active (player avatar hasn't reached the Hall of Mists)
      * 1 - Player avatar has reached the Hall of Mists, so dwarves active but player hasn't encountered one yet
@@ -46,20 +45,23 @@ public class DwarfController : MonoBehaviour
     // === PROPERTIES ===
 
     // Keeps track of current activation level
-    public int ActivationLevel { get; private set; }
+    public int ActivationLevel { get; set; }
 
     // Return number of dwarves killed by player
-    public int DwarvesKilled { get; private set; }
+    public int DwarvesKilled { get; set; }
 
-     // === MONOBEHAVIOUR METHODS ===
+    // Array holding the dwarves
+    public Dwarf[] Dwarves { get; set; }
+
+    // === MONOBEHAVIOUR METHODS ===
 
     private void Awake()
     {
-        dwarves = new Dwarf[6];
+        Dwarves = new Dwarf[6];
 
-        for (int i = 0; i < dwarves.Length; i++)
+        for (int i = 0; i < Dwarves.Length; i++)
         {
-            dwarves[i] = new Dwarf();
+            Dwarves[i] = new Dwarf();
         }
     }
 
@@ -91,7 +93,7 @@ public class DwarfController : MonoBehaviour
             for (int i = 0; i < NUM_DWARVES; i++)
             {
                 // If dwarf has come from where the player is trying to get to and has seen the player ...
-                if (dwarves[i].OldDwarfLocation == playerController.PotentialLocation && dwarves[i].SeenPlayer)
+                if (Dwarves[i].OldDwarfLocation == playerController.PotentialLocation && Dwarves[i].SeenPlayer)
                 {
                     return true;
                 }
@@ -110,7 +112,7 @@ public class DwarfController : MonoBehaviour
             // Cycle through dwarves excluding pirate
             for (int i = 0; i < NUM_DWARVES; i++)
             {
-                if (dwarves[i].Status == DwarfStatus.ALIVE && dwarves[i].DwarfLocation == location)
+                if (Dwarves[i].Status == DwarfStatus.ALIVE && Dwarves[i].DwarfLocation == location)
                 {
                     dwarfCount++;
                 }
@@ -160,7 +162,7 @@ public class DwarfController : MonoBehaviour
             // Cycle through dwarves excluding pirate
             for (int i = 0; i < NUM_DWARVES; i++)
             {
-                if (dwarves[i].Status == DwarfStatus.ALIVE && dwarves[i].DwarfLocation == location)
+                if (Dwarves[i].Status == DwarfStatus.ALIVE && Dwarves[i].DwarfLocation == location)
                 {
                     return i;
                 }
@@ -179,7 +181,7 @@ public class DwarfController : MonoBehaviour
     // Kill all dwarves
     public void KillAllDwarves()
     {
-        for (int i = 0; i < dwarves.Length; i++)
+        for (int i = 0; i < Dwarves.Length; i++)
         {
             KillDwarf(i);
         }
@@ -197,9 +199,9 @@ public class DwarfController : MonoBehaviour
     {
         if (DwarfExists(dwarf, "MoveDwarfTo"))
         {
-            dwarves[dwarf].DwarfLocation = location;
-            dwarves[dwarf].OldDwarfLocation = location;
-            dwarves[dwarf].SeenPlayer = false;
+            Dwarves[dwarf].DwarfLocation = location;
+            Dwarves[dwarf].OldDwarfLocation = location;
+            Dwarves[dwarf].SeenPlayer = false;
         }
     }
 
@@ -207,11 +209,11 @@ public class DwarfController : MonoBehaviour
     public void ResetDwarves()
     {
         // Put dwarves at initial locations and set their state
-        for (int i = 0; i < dwarves.Length; i++)
+        for (int i = 0; i < Dwarves.Length; i++)
         {
-            dwarves[i].Status = DwarfStatus.ALIVE;
-            dwarves[i].SeenPlayer = false;
-            dwarves[i].DwarfLocation = dwarfStartLocations[i];
+            Dwarves[i].Status = DwarfStatus.ALIVE;
+            Dwarves[i].SeenPlayer = false;
+            Dwarves[i].DwarfLocation = dwarfStartLocations[i];
         }
 
         ActivationLevel = 0;
@@ -227,7 +229,7 @@ public class DwarfController : MonoBehaviour
     // Returns true if the given dwarf exists (dead or alive). If not returns false and generates error message
     private bool DwarfExists(int dwarf, string methodName)
     {
-        if (dwarf >= 0 && dwarf < dwarves.Length)
+        if (dwarf >= 0 && dwarf < Dwarves.Length)
         {
             return true;
         }
@@ -263,10 +265,10 @@ public class DwarfController : MonoBehaviour
         // If any of the dwarves is at the player avatar's current location, move them to the alternative location
         for (int i = 0; i < NUM_DWARVES; i++)
         {
-            if (dwarves[i].DwarfLocation == location)
+            if (Dwarves[i].DwarfLocation == location)
             {
-                dwarves[i].DwarfLocation = dwarfStartLocations[6];
-                dwarves[i].OldDwarfLocation = dwarfStartLocations[6];
+                Dwarves[i].DwarfLocation = dwarfStartLocations[6];
+                Dwarves[i].OldDwarfLocation = dwarfStartLocations[6];
             }
         }
 
@@ -296,10 +298,10 @@ public class DwarfController : MonoBehaviour
     // Kills the given dwarf
     private void KillDwarf(int dwarf)
     {
-        dwarves[dwarf].SeenPlayer = false;
-        dwarves[dwarf].DwarfLocation = "OutOfPlay";
-        dwarves[dwarf].OldDwarfLocation = "OutOfPlay";
-        dwarves[dwarf].Status = DwarfStatus.DEAD;
+        Dwarves[dwarf].SeenPlayer = false;
+        Dwarves[dwarf].DwarfLocation = "OutOfPlay";
+        Dwarves[dwarf].OldDwarfLocation = "OutOfPlay";
+        Dwarves[dwarf].Status = DwarfStatus.DEAD;
     }
 
     // Move the dwarves. Return true if the dwarves attacked and killed the player, or false otherwise
@@ -311,22 +313,22 @@ public class DwarfController : MonoBehaviour
 
         string location = playerController.CurrentLocation;
 
-        for (int i = 0; i < dwarves.Length; i++)
+        for (int i = 0; i < Dwarves.Length; i++)
         {
             // Get a list of potential destinations and select one at random
-            List<string> potentialDestinations = PossibleMoves(dwarves[i].DwarfLocation, i);
+            List<string> potentialDestinations = PossibleMoves(Dwarves[i].DwarfLocation, i);
             string destination = potentialDestinations[Random.Range(0, potentialDestinations.Count - 1)];
 
             // Move the dwarf to the new location
-            dwarves[i].OldDwarfLocation = dwarves[i].DwarfLocation;
-            dwarves[i].DwarfLocation = destination;
+            Dwarves[i].OldDwarfLocation = Dwarves[i].DwarfLocation;
+            Dwarves[i].DwarfLocation = destination;
 
             // Dwarf has seen player avatar if they were seen on previous turn and are still deep in the cave, or if they are currently at the dwarf's current or previous location
-            if ((dwarves[i].SeenPlayer && locationController.LocType(location) == LocationType.DEEP) || (location == dwarves[i].DwarfLocation || location == dwarves[i].OldDwarfLocation))
+            if ((Dwarves[i].SeenPlayer && locationController.LocType(location) == LocationType.DEEP) || (location == Dwarves[i].DwarfLocation || location == Dwarves[i].OldDwarfLocation))
             {
                 // Dwarf has seen player avatar so moves to player avatar's location
-                dwarves[i].SeenPlayer = true;
-                dwarves[i].DwarfLocation = location;
+                Dwarves[i].SeenPlayer = true;
+                Dwarves[i].DwarfLocation = location;
 
                 // If this dwarf is the pirate, do special pirate actions at this point
                 if (i == PIRATE)
@@ -339,7 +341,7 @@ public class DwarfController : MonoBehaviour
                     dwarvesHere++;
 
                     // If dwarf has not moved...
-                    if (dwarves[i].DwarfLocation == dwarves[i].OldDwarfLocation)
+                    if (Dwarves[i].DwarfLocation == Dwarves[i].OldDwarfLocation)
                     {
                         //... attack the player
                         dwarvesAttacking++;
@@ -472,7 +474,7 @@ public class DwarfController : MonoBehaviour
                 HidePirateChest();
             }
             // If nothing else has happened, but the pirate has moved, there's a 20% chance the player avatar will hear him
-            else if (dwarves[PIRATE].DwarfLocation != dwarves[PIRATE].OldDwarfLocation && Random.value < .2)
+            else if (Dwarves[PIRATE].DwarfLocation != Dwarves[PIRATE].OldDwarfLocation && Random.value < .2)
             {
                 textDisplayController.AddTextToLog(playerMessageController.GetMessage("127NoisesBehind"));
             }
@@ -483,7 +485,7 @@ public class DwarfController : MonoBehaviour
     private List<string> PossibleMoves(string locationID, int dwarf)
     {
         // Get previous location as we'll need this later
-        string previous = dwarves[dwarf].OldDwarfLocation;
+        string previous = Dwarves[dwarf].OldDwarfLocation;
 
         List<string> possibleDestinations = locationController.Destinations(locationID);
         List<string> usableDestinations = new List<string>();

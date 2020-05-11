@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -16,25 +17,21 @@ public class GameController : MonoBehaviour
     // References to other parts of the game engine
     [SerializeField] private PlayerInput playerInput;             
     [SerializeField] private PlayerMessageController playerMessageController;      
-    [SerializeField] private CommandsController commandsController;
-    [SerializeField] private ActionController actionController;
-    [SerializeField] private TextDisplayController textDisplayController;          
-    [SerializeField] private PlayerController playerController;                    
-    [SerializeField] private ItemController itemController;
-    [SerializeField] private LocationController locationController;
-    [SerializeField] private ParserState parserState;
-    [SerializeField] private HintController hintController;
+    public CommandsController commandsController;
+    public ActionController actionController;
+    public TextDisplayController textDisplayController;          
+    public PlayerController playerController;                    
+    public ItemController itemController;
+    public LocationController locationController;
+    public ParserState parserState;
+    public HintController hintController;
     [SerializeField] private QuestionController questionController;
-    [SerializeField] private ScoreController scoreController;
-    [SerializeField] private DwarfController dwarfController;
+    public ScoreController scoreController;
+    public DwarfController dwarfController;
+    [SerializeField] private PersistenceController persistenceController;
 
     // Hold questions and messages to be used during reincarnation sequence
-    [SerializeField] private ReincarnationText[] reincarnationTexts;
-    
-    private bool panic;                             // Set to true when player finds out they are locked in
-    private int clock1;                             // Countdown number of turns to closing after finding last treasure
-    private int clock2;                             // Countdowns number of turns from first warning to blnding flash            
-    private bool lampWarning;                       // Whether the player has been warned about the lamp dimmiong
+    [SerializeField] private ReincarnationText[] reincarnationTexts;                                                                                     
 
     // Constant values
    
@@ -47,24 +44,35 @@ public class GameController : MonoBehaviour
 
     // === PROPERTIES ===
 
-    public bool WasDark { get; private set; }                   // Keeps track of whether the player is moving from a dark location
-    public CaveStatus CurrentCaveStatus { get; private set; }   // Whether the cave is currently open, closing or closed
-    public int LampLife { get; set; }                   // Keeps track of remaining lamp life                
-    public int NumDeaths { get; private set; }                  // Keeps track of number of times player avatar has died
-    public int MaxDeaths { get { return reincarnationTexts.Length; } }
-    public int Turns { get ; set; }                             // Number of turns taken
+    public bool WasDark { get; set; }                                   // Keeps track of whether the player is moving from a dark location
+    public CaveStatus CurrentCaveStatus { get; set; }                   // Whether the cave is currently open, closing or closed
+    public int LampLife { get; set; }                                   // Keeps track of remaining lamp life                
+    public int NumDeaths { get; set; }                                  // Keeps track of number of times player avatar has died
+    public int MaxDeaths { get { return reincarnationTexts.Length; } }  // Maximum times player avatar can die
+    public int Turns { get ; set; }                                     // Number of turns taken
+    public int Clock1 { get; set; }                                     // Countdown number of turns to closing after finding last treasure
+    public int Clock2 { get; set; }                                     // Countdowns number of turns from first warning to blnding flash
+    public bool LampWarning { get; set; }                               // Whether the player has been warned about the lamp dimmiong
+    public bool Panic { get; set; }                                     // Set to true when player finds out they are locked in
+    public GameStatus CurrentGameStatus { get; set; }                   // Whether the game is currently playing or is over
 
     // ========= MONOBEHAVIOUR METHODS =========
 
     // Sets up the debug panel, if needed, initialises a new game and offers the player the choice of seeing the instructions or not
     private void Start()
     {
-        // Set up parameters for a new game
-        NewGame();
+        // Start the game in the selected mode
+        switch (PlayerPrefs.GetString("CurrentMode"))
+        {
+            case "new":
+                // Set up parameters for a new game
+                NewGame();
 
-        // Clear text view and show welcome message and instructions question
-        textDisplayController.ResetTextDisplay();
-        questionController.RequestQuestionResponse("65Welcome", "1Instructions", null, InstructionsResponseYes, InstructionsResponseNo);
+                // Clear text view and show welcome message and instructions question
+                textDisplayController.ResetTextDisplay();
+                questionController.RequestQuestionResponse("65Welcome", "1Instructions", null, InstructionsResponseYes, InstructionsResponseNo);
+                break;
+        }
     }
 
     // ========= PUBLIC METHODS =========
@@ -74,7 +82,9 @@ public class GameController : MonoBehaviour
     {
         SuspendCommandProcessing();
         scoreController.DisplayScore(isQuitting ? ScoreMode.QUITTING : ScoreMode.ENDING);
-        // TO DO: load or new game 
+        CurrentGameStatus = GameStatus.OVER;
+        textDisplayController.AddTextToLog(playerMessageController.GetMessage("201GameOver"));
+        ResumeCommandProcessing();
     }
 
     // Extends the lamp life by the given amount
@@ -175,6 +185,27 @@ public class GameController : MonoBehaviour
     public void NoReincarnation()
     {
         EndGame(false);
+    }
+
+    // Monitors for a RESUME command and shows a message for any other command (this is the standard processer used acfter the game is over)
+    public void PostGameCommand()
+    {
+        SuspendCommandProcessing();
+        parserState.ResetParserState(playerInput.Words);
+
+        if (parserState.NextCommandForProcessing())
+        {
+            List<string> currentCommands = parserState.CurrentCommands;
+
+            if (currentCommands.Contains("2031Resume"))
+            {
+                actionController.ExecuteAction("2031Resume");
+            }
+            else
+            {
+                textDisplayController.AddTextToLog(playerMessageController.GetMessage("201GameOver"));
+            }
+        }
     }
 
     // Begin a new turn
@@ -281,6 +312,9 @@ public class GameController : MonoBehaviour
             hintOrDeathQuestion = hintController.CheckForHints(playerController.CurrentLocation);
         }
 
+        // Check to see if a continuation save is due
+        persistenceController.CheckContinuationSave();
+
         return hintOrDeathQuestion;
     }
 
@@ -307,10 +341,24 @@ public class GameController : MonoBehaviour
         }
     }
 
+    // Returns to menu (saves the Continue state first)
+    public void ReturnToMenu()
+    {
+        persistenceController.SaveGame(false);
+        SceneManager.LoadScene("Menu");
+    }
+
     // Resume interpreting input from the player as commands
     public void ResumeCommandProcessing()
     {
-        PlayerInput.commandsEntered = GetPlayerCommand;
+        if (CurrentGameStatus == GameStatus.PLAYING)
+        {
+            PlayerInput.commandsEntered = GetPlayerCommand;
+        }
+        else
+        {
+            PlayerInput.commandsEntered =  PostGameCommand;
+        }
     }
 
     // Start the closure of the cave
@@ -341,7 +389,7 @@ public class GameController : MonoBehaviour
         itemController.MakeItemMovable("28Axe");
 
         // indicate we're closing
-        clock1 = -1;
+        Clock1 = -1;
         CurrentCaveStatus = CaveStatus.CLOSING;
 
         // Finally, let the player know what's happening
@@ -372,10 +420,10 @@ public class GameController : MonoBehaviour
     // Called when the player finds out they are locked in (i.e. after closing starts) to set panic mode
     public void StartPanic()
     {
-        if (!panic)
+        if (!Panic)
         {
-            clock2 = PANIC_CLOCK;
-            panic = true;
+            Clock2 = PANIC_CLOCK;
+            Panic = true;
         }
     }
 
@@ -385,10 +433,7 @@ public class GameController : MonoBehaviour
         PlayerInput.commandsEntered = null;
     }
 
-    
-
     // ========= PRIVATE METHODS =========
-
    
     // If debug mode is on, activate the debug panel
     private void ActivateDebugPanel()
@@ -493,11 +538,12 @@ public class GameController : MonoBehaviour
     private void NewGame()
     {
         // Initialise variables
+        CurrentGameStatus = GameStatus.PLAYING;
         Turns = 0;
-        panic = false;
-        clock1 = CLOCK_1_INITIAL;
-        clock2 = CLOCK_2_INITIAL;
-        lampWarning = false;
+        Panic = false;
+        Clock1 = CLOCK_1_INITIAL;
+        Clock2 = CLOCK_2_INITIAL;
+        LampWarning = false;
         NumDeaths = 0;
         CurrentCaveStatus = CaveStatus.OPEN;
 
@@ -524,6 +570,9 @@ public class GameController : MonoBehaviour
 
         // Reset the player
         playerController.ResetPlayer();
+
+        // Reset the persistence mechanism
+        persistenceController.ResetLastSave();
     }
 
     // Player has died, offer reincarnation or wrap things up
@@ -553,18 +602,18 @@ public class GameController : MonoBehaviour
         // If all treasures collected, and in deep and not at Y2, countdown clock to closing
         if (itemController.TreasuresRemaining == 0 && locationController.LocType(location) == LocationType.DEEP && location != "33Y2")
         {
-            clock1--;
+            Clock1--;
 
-            if (clock1 == 0)
+            if (Clock1 == 0)
             {
                 StartClosing();
             }
-            else if (clock1 < 0)
+            else if (Clock1 < 0)
             {
                 // We're already closing, so countdown clock to blinding flash
-                clock2--;
+                Clock2--;
 
-                if (clock2 == 0)
+                if (Clock2 == 0)
                 {
                     StartEndGame();
                 }
@@ -612,13 +661,13 @@ public class GameController : MonoBehaviour
                     }
 
                     LampLife += 2500;
-                    lampWarning = false;
+                    LampWarning = false;
                     lampMessage = "188BatteryReplacement";
                 }
                 // Otherwise show a message based on whether the batteries exist, have been used, etc.
-                else if (!lampWarning && lampIsHere)
+                else if (!LampWarning && lampIsHere)
                 {
-                    lampWarning = true;
+                    LampWarning = true;
                     lampMessage = "187BatteriesWarning";
                    
                     if (!itemController.ItemInPlay(BATTERIES))
@@ -643,6 +692,9 @@ public class GameController : MonoBehaviour
 
 // Cave Status shows whether the cave is currently open, closing or closed
 public enum CaveStatus { OPEN, CLOSING, CLOSED };
+
+// Game status shows whether the game is currently playing or is over
+public enum GameStatus { PLAYING, OVER };
 
 
 

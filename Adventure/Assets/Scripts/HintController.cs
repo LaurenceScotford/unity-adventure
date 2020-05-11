@@ -1,7 +1,8 @@
 ﻿// Hint Controller
 // Manages hints to the player
 
-using UnityEngine; 
+using System.Collections.Generic;
+using UnityEngine;
 
 public class HintController : MonoBehaviour
 {
@@ -19,10 +20,12 @@ public class HintController : MonoBehaviour
 
     [SerializeField] Hint[] hints;      // Array holding all the available hints
 
-    private int currentHint;              // Keepos track of hint being checked
-    private string locationToCheck;       // Keeps track of location currently being checked
+    private int currentHint;                                     // Keepos track of hint being checked
+    private string locationToCheck;                              // Keeps track of location currently being checked
+    public Dictionary<string, HintActivation> hintActivations;   // Tracks the hint activation and count for each hint
 
     // === PROPERTIES ===
+
     public int PointsDeductedForHints
     {
         get
@@ -31,7 +34,7 @@ public class HintController : MonoBehaviour
 
             foreach (Hint hint in hints)
             {
-                if (hint.HintActivated)
+                if (hintActivations[hint.HintID].hintActivated)
                 {
                     pointsDeducted += hint.PointsCost;
                 }
@@ -42,32 +45,39 @@ public class HintController : MonoBehaviour
     }
 
     // === PUBLIC METHODS ===
-    
+
     // Checks if the given location is eligible for any of the hints on this turn. If so asks the hint quesiton and returns true, otherwise returns false
     public bool CheckForHints(string locationID)
     {
-        locationToCheck = locationID;
         currentHint = -1;
 
         // Check against all the hints
         for (var i = 0; i < hints.Length; i++)
         {
+            string hintID = hints[i].HintID;
+
             // If the hint has not already been activated...
-            if (!hints[i].HintActivated)
+            if (!hintActivations[hintID].hintActivated)
             {
                 // Check if this location is eligible for a hint on this turn
-                string hintQuestion = hints[i].CheckLocation(locationToCheck);
-
-                // If so...
-                if (hintQuestion != null)
+                if (hints[i].Locations.Contains(locationID))
                 {
-                    hints[i].ResetCounter();
+                    hintActivations[hintID].hintCounter++;
 
-                    if (QuickChecks(hints[i].HintID))
+                    if (hintActivations[hintID].hintCounter >= hints[i].TurnsTillActivation)
                     {
-                        currentHint = i;
-                        break;
-                    }
+                        hintActivations[hintID].hintCounter = 0;
+
+                        if (QuickChecks(hintID))
+                        {
+                            currentHint = i;
+                            break;
+                        }
+                    }    
+                }
+                else
+                {
+                    hintActivations[hintID].hintCounter = 0;
                 }
             }
         }
@@ -97,8 +107,7 @@ public class HintController : MonoBehaviour
     // Callback if player answers positively to the hint confirmation question
     public void HintWantedResponse()
     {
-        hints[currentHint].HintActivated = true;
-
+        hintActivations[hints[currentHint].HintID].hintActivated = true;
 
         // If the lamp is not already dimming, extend the lamp life based on the cost of the hint
         if (gameController.LampLife > 30)
@@ -156,10 +165,25 @@ public class HintController : MonoBehaviour
 
     public void ResetHints()
     {
-        for (int i = 0; i < hints.Length; i++)
+        hintActivations = new Dictionary<string, HintActivation>();
+
+        foreach (Hint hint in hints)
         {
-            hints[i].ResetHint();
+            hintActivations.Add(hint.HintID, new HintActivation());
         }
+    }
+}
+
+// Used for keeping track of hint activations
+public class HintActivation
+{
+    public bool hintActivated;
+    public int hintCounter;
+
+    public HintActivation()
+    {
+        hintActivated = false;
+        hintCounter = 0;
     }
 }
 

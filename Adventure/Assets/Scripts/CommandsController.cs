@@ -25,15 +25,14 @@ public class CommandsController : MonoBehaviour
     // A dictionary created on waking that is used to lookup individual commands 
     private Dictionary<string, Command> commandsDict = new Dictionary<string, Command>();
 
-    private int westCount;      // Keeps trak of the number of times player has used the word "WEST" in full rather than "W"
-
     // === PROPERTIES ===
 
     // The text for this magic word command gets randomised at the start of each new game - this property is used to access the generated text 
-    public string MagicWordText { get; private set; }
+    public string MagicWordText { get; set; }
 
     // Keeps track of item referenced in previous command
-    public string OldItem { get; private set; }   
+    public string OldItem { get; set; }
+    public int WestCount { get; set; }  // Keeps trak of the number of times player has used the word "WEST" in full rather than "W"
 
     // ==== MONOBEHAVIOR METHODS ===
 
@@ -48,10 +47,10 @@ public class CommandsController : MonoBehaviour
 
     // ==== PUBLIC METHODS ===
 
-    // Returns a list of commands matching the given word (list will be empty if no matches were found)
-    public List<Command> FindMatch(string wordToMatch)
+    // Returns a list of commands IDs matching the given word (list will be empty if no matches were found)
+    public List<string> FindMatch(string wordToMatch)
     {
-        List<Command> matchedCommands = new List<Command>();
+        List<string> matchedCommands = new List<string>();
         wordToMatch = wordToMatch.ToUpper();
 
         // If the word to match is the generated magic word then change it to match the default pattern
@@ -64,14 +63,15 @@ public class CommandsController : MonoBehaviour
         {
             if (command.matchesWord(wordToMatch.ToUpper()))
             {
-                matchedCommands.Add(command);
+                matchedCommands.Add(command.CommandID);
             }
         }
 
         return matchedCommands;
     }
 
-     // Process a new command from the player
+    // Process a new command from the player
+
     public CommandOutcome ProcessCommand()
     {
         OldItem = null;
@@ -79,10 +79,10 @@ public class CommandsController : MonoBehaviour
         // If there's a command to process, then process it
         if (parserState.NextCommandForProcessing())
         {
-            List<Command> currentCommands = parserState.CurrentCommands;
+            List<string> currentCommands = parserState.CurrentCommands;
 
             // Prioritise the first (and possibly only) command matched
-            Command command = currentCommands[0];
+            Command command = GetCommandWithID(currentCommands[0]);
 
             // If there's more one match and we've already identified a verb...
             if (currentCommands.Count > 1 && parserState.ContainsState(CommandState.VERB_IDENTIFIED))
@@ -90,9 +90,11 @@ public class CommandsController : MonoBehaviour
                 for (int i = 0; i < currentCommands.Count; i++)
                 {
                     // ... then prioritise matches with item commands
-                    if (currentCommands[i] is ItemWord)
+                    Command nextCommand = GetCommandWithID(currentCommands[i]);
+
+                    if (nextCommand is ItemWord)
                     {
-                        command = currentCommands[i];
+                        command = nextCommand;
                         parserState.ActiveCommandIndex = i;
                         break;
                     }
@@ -108,19 +110,19 @@ public class CommandsController : MonoBehaviour
             // Process the command based on its type
             if (command is MovementWord)
             {
-                return ProcessMovement();
+                return ProcessMovement(command);
             }
             else if (command is ActionWord)
             {
-                return ProcessAction();
+                return ProcessAction(command);
             }
             else if (command is ItemWord)
             {
-                return ProcessItem();
+                return ProcessItem(command);
             }
             else if (command is SpecialWord)
             {
-                return ProcessSpecial();
+                return ProcessSpecial(command);
             }
         }
 
@@ -129,7 +131,7 @@ public class CommandsController : MonoBehaviour
 
     public void ResetCommands()
     {
-        westCount = 0;   //  Resets the west count that tracks use of full term "WEST"
+        WestCount = 0;   //  Resets the west count that tracks use of full term "WEST"
 
         // Generate a new randomised magic word of the form ?'??? where ? is a random letter
         MagicWordText = "";
@@ -149,18 +151,18 @@ public class CommandsController : MonoBehaviour
 
     // ==== PRIVATE METHODS ===
 
-     // Returns the command with the given ID, or null if not found
+    // Returns the command with the given ID, or null if not found
     private Command GetCommandWithID(string commandID)
     {
         return commandsDict.ContainsKey(commandID) ? commandsDict[commandID] : null;
     }
 
     // Process an action command
-    private CommandOutcome ProcessAction()
+    private CommandOutcome ProcessAction( Command command)
     {
         parserState.CurrentCommandState = CommandState.VERB_IDENTIFIED;
 
-        ActionWord action = (ActionWord)parserState.ActiveCommand;
+        ActionWord action = (ActionWord)command;
         CommandOutcome actionOutcome = actionController.ExecuteAction(action.ActionID);
 
         CommandState commandState = parserState.CurrentCommandState;
@@ -186,10 +188,10 @@ public class CommandsController : MonoBehaviour
     }
 
     // Process an item word
-    private CommandOutcome ProcessItem()
+    private CommandOutcome ProcessItem(Command itemCommand)
     {
         // Select the command to use
-        ItemWord command = (ItemWord)parserState.ActiveCommand;
+        ItemWord command = (ItemWord)itemCommand;
 
         OldItem = command.AssociatedItem;
 
@@ -202,16 +204,16 @@ public class CommandsController : MonoBehaviour
         {
             // Player is trying to water/oil the plant/door, so construct a POUR command with this item as the subject and execute that instead
             CommandWord pourCommand = new CommandWord("POUR", null);
-            CommandWord itemCommand = new CommandWord(parserState.Words[0], parserState.Words[1]);
-            parserState.ResetParserState(new CommandWord[2] { pourCommand, itemCommand });
+            CommandWord newItemCommand = new CommandWord(parserState.Words[0], parserState.Words[1]);
+            parserState.ResetParserState(new CommandWord[2] { pourCommand, newItemCommand });
             return ProcessCommand();
         }
         else if (command.CommandID == "1004Cage" && otherWordActive == "BIRD" && playerController.ItemIsPresent("4Cage") && playerController.ItemIsPresent("8Bird"))
         {
             // Player is trying to cage the bird, so construct a CATCH command with the bird as the subject and execute that instead
             CommandWord catchCommand = new CommandWord("CATCH", null);
-            CommandWord itemCommand = new CommandWord(otherWord[0], otherWord[1]);
-            parserState.ResetParserState(new CommandWord[2] { catchCommand, itemCommand });
+            CommandWord newItemCommand = new CommandWord(otherWord[0], otherWord[1]);
+            parserState.ResetParserState(new CommandWord[2] { catchCommand, newItemCommand });
             return ProcessCommand();
         }
 
@@ -236,12 +238,12 @@ public class CommandsController : MonoBehaviour
                     {
                         if (playerController.PlayerCanBeFoundAt(new List<string> { "1Road", "4Valley", "7SlitInStreambed" }))
                         {
-                            parserState.SubstituteCommand(GetCommandWithID("63Depression"));
+                            parserState.SubstituteCommand("63Depression");
                             continueProcessing = true;
                         }
                         else if (playerController.PlayerCanBeFoundAt(new List<string> { "10CobbleCrawl", "11DebrisRoom", "12AwkwardCanyon", "13BirdChamber", "14TopOfPit" }))
                         {
-                            parserState.SubstituteCommand(GetCommandWithID("64Entrance"));
+                            parserState.SubstituteCommand("64Entrance");
                             continueProcessing = true;
                         }
                     }
@@ -372,15 +374,15 @@ public class CommandsController : MonoBehaviour
 
 
     // Process a movement command
-    private CommandOutcome ProcessMovement()
+    private CommandOutcome ProcessMovement(Command movementCommand)
     {
-        Command command = (MovementWord)parserState.ActiveCommand;
+        Command command = (MovementWord)movementCommand;
         parserState.CommandComplete();  // We have a movement command so we don't need to process anything else
 
         // if the player has used the full command "WEST" ...
         if (parserState.Words[0].ToUpper() == "WEST")
         {
-            if (++westCount == 10)
+            if (++WestCount == 10)
             {
                 textDisplayController.AddTextToLog(playerMessageController.GetMessage("17ShortWest"));
             }
@@ -422,10 +424,10 @@ public class CommandsController : MonoBehaviour
 
 
     // Process a special word
-    private CommandOutcome ProcessSpecial()
+    private CommandOutcome ProcessSpecial(Command specialCommand)
     {
         // Select the command to use
-        SpecialWord command = (SpecialWord)parserState.ActiveCommand;
+        SpecialWord command = (SpecialWord)specialCommand;
 
         // Display the default message
         textDisplayController.AddTextToLog(playerMessageController.GetMessage(command.DefaultMessageID));

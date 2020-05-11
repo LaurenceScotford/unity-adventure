@@ -17,10 +17,6 @@ public class ScoreController : MonoBehaviour
     [SerializeField] private TextDisplayController textDisplayController;
     [SerializeField] private PlayerMessageController playerMessageController;
 
-    private int thresholdIndex;                                   // Index of next turn threshold
-    private int turnsPointsLost;                                  // Keeps track of points lost for using too many turns
-    private int bonusPoints;                                      // Keeps track of bonus points added
-    private int savePenaltyPoints;                                // keeps track of points spent on saving game
     private int score;                                            // Used to calculate total score
     private int maxScore;                                         // Used to calculate maximum score
     private ScoreMode mode;                                       // The scoring mode
@@ -52,32 +48,37 @@ public class ScoreController : MonoBehaviour
 
     // === PROPERTIES ===
 
+    
+    public bool ClosedHintShown { get; set; }   // Keeps track of whether the closed hint on the oyster was shown
+    public bool IsNovice { get; set; }
+    public int BonusPoints { get; set; }        // Keeps track of bonus points added
+    public int SavePenaltyPoints { get; set; }  // keeps track of points spent on saving game
+    public int ThresholdIndex { get; set; }     // Index of next turn threshold
+    public int TurnsPointsLost { get; set; }    // Keeps track of points lost for using too many turns
+
+    // === PUBLIC METHODS ===
+
     // Adds bonus points to the existing total
     public void AddBonusPoints(int points)
     {
-        bonusPoints += points;
+        BonusPoints += points;
     }
 
     // Adds save penalty points for saving the game
     public void AddSavePenalty()
     {
-        savePenaltyPoints += 5;
+        SavePenaltyPoints += 5;
     }
-
-    public bool ClosedHintShown { get; set; }             // Keeps track of whether the closed hint on the oyster was shown
-    public bool IsNovice { get; set; }
-
-    // === PUBLIC METHODS ===
 
     // Checks if player has passed a number of turns threshold, and shows message and deducts points if so
     public void CheckTurnThresholds(int turns)
     {
-        if (thresholdIndex < turnThresholds.Length && turns == turnThresholds[thresholdIndex].threshold)
+        if (ThresholdIndex < turnThresholds.Length && turns == turnThresholds[ThresholdIndex].threshold)
         {
-            turnsPointsLost += turnThresholds[thresholdIndex].pointsLost;
+            TurnsPointsLost += turnThresholds[ThresholdIndex].pointsLost;
 
-            textDisplayController.AddTextToLog(playerMessageController.GetMessage(turnThresholds[thresholdIndex].messageID));
-            thresholdIndex++;
+            textDisplayController.AddTextToLog(playerMessageController.GetMessage(turnThresholds[ThresholdIndex].messageID));
+            ThresholdIndex++;
         }
     }
 
@@ -109,13 +110,13 @@ public class ScoreController : MonoBehaviour
         else
         {
             // Show message if player missed maxing out their score by taking too long
-            if (score + turnsPointsLost + 1 >= maxScore && turnsPointsLost != 0)
+            if (score + TurnsPointsLost + 1 >= maxScore && TurnsPointsLost != 0)
             {
                 textDisplayController.AddTextToLog(playerMessageController.GetMessage("242SoLong"));
             }
 
             // Show message if player missed maxing out their score by saving the game
-            if (score + savePenaltyPoints + 1 >= maxScore && savePenaltyPoints != 0)
+            if (score + SavePenaltyPoints + 1 >= maxScore && SavePenaltyPoints != 0)
             {
                 textDisplayController.AddTextToLog(playerMessageController.GetMessage("143NoSuspense"));
             }
@@ -159,10 +160,10 @@ public class ScoreController : MonoBehaviour
     // Reset scores ready for a new game
     public void ResetScores()
     {
-        thresholdIndex = 0;
-        turnsPointsLost = 0;
-        bonusPoints = 0;
-        savePenaltyPoints = 0;
+        ThresholdIndex = 0;
+        TurnsPointsLost = 0;
+        BonusPoints = 0;
+        SavePenaltyPoints = 0;
         ClosedHintShown = false;
         IsNovice = false;
     }
@@ -186,10 +187,10 @@ public class ScoreController : MonoBehaviour
         }
 
         // Deduct points for taking too long
-        score -= turnsPointsLost;
+        score -= TurnsPointsLost;
 
         // Deduct points for saving the game
-        score -= savePenaltyPoints;
+        score -= SavePenaltyPoints;
     }
 
     // Calculate score for progress
@@ -226,7 +227,7 @@ public class ScoreController : MonoBehaviour
         // Add bonus points if reached closed
         if (caveStatus == CaveStatus.CLOSED)
         {
-            score += bonusPoints;
+            score += BonusPoints;
         }
 
         // Add a point for leaving the magazine at Witt's End

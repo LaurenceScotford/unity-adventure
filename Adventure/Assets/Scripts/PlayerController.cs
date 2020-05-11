@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
 
     // === PROPERTIES ===
 
-    public string CurrentLocation { get; private set; } // The current location of the player avatar
+    public string CurrentLocation { get; set; } // The current location of the player avatar
     public string[] OldLocations { get; private set; }
 
     // Returns a string with a list of items carried by the player avatar

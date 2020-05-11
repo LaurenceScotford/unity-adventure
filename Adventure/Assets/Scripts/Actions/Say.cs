@@ -42,12 +42,12 @@ public class Say : Action
         {
             bool foundMagicWord = false;
 
-            List<Command> otherCommands = commandsController.FindMatch(otherWord[0]);
+            List<string> otherCommands = commandsController.FindMatch(otherWord[0]);
 
-            foreach (Command command in otherCommands)
+            foreach (string command in otherCommands)
             {
                 
-               if (magicWords.Contains(command.CommandID))
+               if (magicWords.Contains(command))
                 {
                     foundMagicWord = true;
                     break;

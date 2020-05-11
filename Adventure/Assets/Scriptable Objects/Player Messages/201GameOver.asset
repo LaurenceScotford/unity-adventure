@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: 201GameOver
   m_EditorClassIdentifier: 
   messageID: 201GameOver
-  message: "This adventure is already over. To start a new adventure, or to\r resume
-    an earlier adventure, please run a fresh copy of the program.\r"
+  message: "This adventure is over. To start a new adventure, please click MENU to
+    return to the menu and click NEW GAME.\r To resume an earlier adventure, use
+    the RESUME command or return to the menu and click LOAD GAME."

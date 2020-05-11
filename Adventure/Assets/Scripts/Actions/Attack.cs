@@ -163,7 +163,7 @@ public class Attack : Action
             // Try the secondary substitutes
             foreach (Substitute target in secondarySubstitutes)
             {
-                if (itemController.ItemIsAt(target.item, location) && (!target.conditional || parserState.ActiveCommand.CommandID != "2017Throw"))
+                if (itemController.ItemIsAt(target.item, location) && (!target.conditional || parserState.ActiveCommand != "2017Throw"))
                 {
                     subject = target.item;
                     subjectCount++;

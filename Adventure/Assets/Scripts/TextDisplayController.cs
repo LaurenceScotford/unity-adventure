@@ -12,7 +12,7 @@ public class TextDisplayController : MonoBehaviour
 
     [SerializeField] private Text textLogView;                    // Reference to text field that the narrative appears in
     [SerializeField] private ScrollRect scrollView;               // Reference to scrolling view on narrative text
-    private List<string> textLog = new List<string>();            // All the text shown in the narrative is logged here
+    public List<string> textLog = new List<string>();            // All the text shown in the narrative is logged here
 
     // === PUBLIC  METHODS ===
 

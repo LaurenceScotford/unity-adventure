@@ -20,25 +20,23 @@ public class ItemController : MonoBehaviour
     // The items to be set up in the end game
     [SerializeField] private EndgameItem[] endgameItems;
 
-    private const string DEADDROP = "OutOfPlay";                // The unreachable location that items are sent to when destroyed 
+    private const string DEADDROP = "OutOfPlay";              // The unreachable location that items are sent to when destroyed 
 
-    private List<string> treasuresSeen = new List<string>();    // Keeps track of treasures found by player
-                                    
-    // A dictionary used to lookup items
-    private Dictionary<string, ItemRuntime> itemDict;
+    private Dictionary<string, Item> itemLookup;              // A dictionary holding the initial and static values for each item
 
     // === PROPERTIES ===
     public int TreasuresRemaining
     {
         get
         {
-            return MaxTreasures - treasuresSeen.Count;
+            return MaxTreasures - TreasuresSeen.Count;
         }
     }
 
     public int MaxTreasures { get; private set; }   // Holds the number of treasures in the game
     public int MaxTreasurePoints { get; private set; }  // Holds the maximum points attainable by leaving treasures in the building
-    public List<string> TreasuresSeen { get { return treasuresSeen; } }
+    public List<string> TreasuresSeen { get; set; } = new List<string>();   // Keeps track of treasures found by player
+    public Dictionary<string, ItemRuntime> ItemDict { get; set; }   // A dictionary holding the curren states of each item
 
     // === MONOBEHAVIOUR METHODS ===
 
@@ -48,8 +46,12 @@ public class ItemController : MonoBehaviour
         MaxTreasures = 0;
         MaxTreasurePoints = 0;
 
+        itemLookup = new Dictionary<string, Item>();
+
         for (int i = 0; i < items.Length; i++)
         {
+            itemLookup.Add(items[i].itemID, items[i]);
+
             if (items[i].isTreasure)
             {
                 MaxTreasures++;
@@ -60,24 +62,24 @@ public class ItemController : MonoBehaviour
 
     // === PUBLIC METHODS ===
 
-    // Retursn true if the given item is currently at its initial location
+    // Returns true if the given item is currently at its initial location
     public bool AtInitalLocation(string itemID)
     {
 
-        return ItemExists(itemID, "AtInitialLocation") && itemDict[itemID].AtInitialLocation;
+        return ItemExists(itemID, "AtInitialLocation") && ItemDict[itemID].CurrentLocation == itemLookup[itemID].initialLocation && ItemDict[itemID].CurrentLocation2 == itemLookup[itemID].initialLocation2; 
     }
 
     // Used to change the bird sound after drinking dragon blood
     public void ChangeBirdSound()
     {
-        itemDict["8Bird"].ListenOffset = 6;
+        ItemDict["8Bird"].ListenOffset = 6;
     }
 
     // If the knife is in play but not at player avatar's current location, then remove it from play
     public void CleanUpKnife()
     {
         const string KNIFE = "18Knife";
-        string knifeLoc = itemDict[KNIFE].CurrentLocation;
+        string knifeLoc = ItemDict[KNIFE].CurrentLocation;
         
         if (knifeLoc != DEADDROP && knifeLoc != playerController.CurrentLocation)
         {
@@ -97,12 +99,12 @@ public class ItemController : MonoBehaviour
             // Temporarily change steps description when coming down steps
             if (isSteps)
             {
-                int describeStepsState = itemDict[itemID].IsInitialLocation(playerController.CurrentLocation, LOCATION_POSITION.FIRST_LOCATION) ? 0 : 1;
-                itemDict[itemID].ItemState = describeStepsState;
+                int describeStepsState = IsInitialLocation(itemID, playerController.CurrentLocation, LOCATION_POSITION.FIRST_LOCATION) ? 0 : 1;
+                ItemDict[itemID].ItemState = describeStepsState;
             }
 
             TallyTreasure(itemID);
-            return !(isSteps && carryingGold) ? itemDict[itemID].Description : null;
+            return !(isSteps && carryingGold) ? itemLookup[itemID].descriptions[ItemDict[itemID].ItemState] : null;
         }
 
         return null;
@@ -127,7 +129,7 @@ public class ItemController : MonoBehaviour
     {
         if (ItemExists(itemToDestroy, "DestroyItem"))
         {
-            itemDict[itemToDestroy].DropAt(DEADDROP);
+            ItemDict[itemToDestroy].DropAt(DEADDROP);
         }
     }
 
@@ -168,18 +170,18 @@ public class ItemController : MonoBehaviour
         }
 
         // Now take care of a couple of special cases
-        itemDict["15Oyster"].ReadOffset = 3;
-        itemDict["49Sign"].ReadOffset++;
+        ItemDict["15Oyster"].ReadOffset = 3;
+        ItemDict["49Sign"].ReadOffset++;
     }
 
     // Return ID of first item at location or null if none
     public string FirstItemAt(string location)
     {
-        foreach (ItemRuntime item in itemDict.Values)
+        foreach (KeyValuePair<string, ItemRuntime> item in ItemDict)
         {
-            if (item.IsAt(location))
+            if (item.Value.IsAt(location))
             {
-                return item.ItemID;
+                return item.Key;
             }
         }
 
@@ -191,7 +193,7 @@ public class ItemController : MonoBehaviour
     {
         if (ItemExists(itemID, "GetItemState"))
         {
-            return itemDict[itemID].ItemState;
+            return ItemDict[itemID].ItemState;
         }
 
         return -1;
@@ -202,7 +204,7 @@ public class ItemController : MonoBehaviour
     {
         if (ItemExists(itemID, "GetTreasurePoints"))
         {
-            return itemDict[itemID].IsTreasure ? itemDict[itemID].TreasurePoints : 0;
+            return itemLookup[itemID].isTreasure ? itemLookup[itemID].treasurePoints : 0;
         }
 
         return 0;
@@ -211,13 +213,38 @@ public class ItemController : MonoBehaviour
     // Returns true if the given location is the requested initial location of the given item
     public bool IsInitialLocation(string itemID, string locationID, LOCATION_POSITION locPos)
     {
-        return ItemExists(itemID, "IsInitialLocation") && LocationExists(locationID, "IsInitialLocation") && itemDict[itemID].IsInitialLocation(locationID, locPos);
+        //return ItemExists(itemID, "IsInitialLocation") && LocationExists(locationID, "IsInitialLocation") && ItemDict[itemID].IsInitialLocation(locationID, locPos);
+
+        if (ItemExists(itemID, "IsInitialLocation"))
+        {
+            bool isLocation1 = itemLookup[itemID].initialLocation == locationID;
+            bool isLocation2 = itemLookup[itemID].initialLocation2 == locationID;
+
+            bool outcome = false;
+
+            switch (locPos)
+            {
+                case LOCATION_POSITION.EITHER_LOCATION:
+                    outcome = isLocation1 || isLocation2;
+                    break;
+                case LOCATION_POSITION.FIRST_LOCATION:
+                    outcome = isLocation1;
+                    break;
+                case LOCATION_POSITION.SECOND_LOCATION:
+                    outcome = isLocation2;
+                    break;
+            }
+
+            return outcome;
+        }
+
+        return false;
     }
 
     // Returns true if the given item is a treasure item
     public bool IsTreasure(string itemID)
     {
-        return ItemExists(itemID, "IsTreasure") && itemDict[itemID].IsTreasure;
+        return ItemExists(itemID, "IsTreasure") && itemLookup[itemID].isTreasure;
     }
 
     // Returns a list of item IDs at the given location
@@ -225,11 +252,11 @@ public class ItemController : MonoBehaviour
     {
         List<string> itemsList = new List<string>();
 
-        foreach (ItemRuntime item in itemDict.Values)
+        foreach (KeyValuePair<string, ItemRuntime> item in ItemDict)
         {
-            if (item.IsAt(location))
+            if (item.Value.IsAt(location))
             {
-                itemsList.Add(item.ItemID);
+                itemsList.Add(item.Key);
             }
         }
 
@@ -241,7 +268,7 @@ public class ItemController : MonoBehaviour
     {
         if (ItemExists(itemID, "ItemCanBeHeard"))
         {
-            return itemDict[itemID].CanBeHeard;
+            return ItemDict[itemID].CanBeHeard;
         }
 
         return false;
@@ -250,7 +277,7 @@ public class ItemController : MonoBehaviour
     // Returns true if the given item is currently movable
     public bool ItemCanBeMoved(string itemID)
     {
-        return ItemExists(itemID, "ItemCanBeMoved") && itemDict[itemID].IsMovable;
+        return ItemExists(itemID, "ItemCanBeMoved") && ItemDict[itemID].IsMovable;
     }
 
     // Returns true if the given item can be read
@@ -258,7 +285,7 @@ public class ItemController : MonoBehaviour
     {
         if (ItemExists(itemID, "ItemCanBeRead"))
         {
-            return itemDict[itemID].CanBeRead;
+            return ItemDict[itemID].CanBeRead;
         }
 
         return false;
@@ -267,13 +294,13 @@ public class ItemController : MonoBehaviour
     // Returns true if the given item exists - note there is a private version of this with a different signature
     public bool ItemExists(string itemID)
     {
-        return itemDict.ContainsKey(itemID);
+        return ItemDict.ContainsKey(itemID);
     }
 
     // Returns true if the given item is currently in play
     public bool ItemInPlay(string itemToCheck)
     {
-        return ItemExists(itemToCheck, "ItemInPlay") && !itemDict[itemToCheck].IsAt(DEADDROP);
+        return ItemExists(itemToCheck, "ItemInPlay") && !ItemDict[itemToCheck].IsAt(DEADDROP);
     }
 
     // Returns true if the item with the given itemID is at the given location
@@ -281,7 +308,7 @@ public class ItemController : MonoBehaviour
     {
         if (ItemExists(itemID, "ItemIsAt"))
         {
-            return itemDict[itemID].IsAt(location);
+            return ItemDict[itemID].IsAt(location);
         }
 
         return false;
@@ -292,7 +319,7 @@ public class ItemController : MonoBehaviour
     {
         if (ItemExists(itemID, "ListenToItem"))
         {
-            return itemDict[itemID].Sound;
+            return itemLookup[itemID].descriptions[ItemDict[itemID].ListenOffset];
         }
 
         return null;
@@ -303,15 +330,14 @@ public class ItemController : MonoBehaviour
     {
         string resultString = "";
 
-        foreach (ItemRuntime item in itemDict.Values)
+        foreach (KeyValuePair<string, ItemRuntime> item in ItemDict)
         {
-            string name = item.Name;
+            string name = itemLookup[item.Key].itemName;
 
-            if ((item.CurrentLocation == locationID || item.CurrentLocation2 == locationID) && name != null && name != "")
+            if ((item.Value.CurrentLocation == locationID || item.Value.CurrentLocation2 == locationID) && name != null && name != "")
             {
                 resultString += "\n" + name;
             }
-
         }
 
         return resultString;
@@ -322,7 +348,7 @@ public class ItemController : MonoBehaviour
     {
         if (ItemExists(itemID, "MakeItemImmovable"))
         {
-            itemDict[itemID].IsMovable = false;
+            ItemDict[itemID].IsMovable = false;
         }
     }
 
@@ -331,7 +357,7 @@ public class ItemController : MonoBehaviour
     {
         if (ItemExists(itemID, "MakeItemMovable"))
         {
-            itemDict[itemID].IsMovable = true;
+            ItemDict[itemID].IsMovable = true;
         }
     }
 
@@ -340,7 +366,7 @@ public class ItemController : MonoBehaviour
     {
         int count = 0;
 
-        foreach (ItemRuntime item in itemDict.Values)
+        foreach (ItemRuntime item in ItemDict.Values)
         {
             if (item.IsAt(location))
             {
@@ -356,7 +382,7 @@ public class ItemController : MonoBehaviour
     {
         if (ItemExists(itemID, "ReadItem"))
         {
-            return playerMessageController.GetMessage(itemDict[itemID].Text);
+            return itemLookup[itemID].descriptions[ItemDict[itemID].ReadOffset];
         }
 
         return null;
@@ -367,7 +393,8 @@ public class ItemController : MonoBehaviour
     {
         if (ItemExists(itemID, "ResetItem"))
         {
-            itemDict[itemID].Reset();
+            ItemDict[itemID].CurrentLocation = itemLookup[itemID].initialLocation;
+            ItemDict[itemID].CurrentLocation2 = itemLookup[itemID].initialLocation2;
         }
     }
 
@@ -375,18 +402,18 @@ public class ItemController : MonoBehaviour
     public void ResetItems()
     {
         // Reset treasures seen
-        treasuresSeen.Clear();
+        TreasuresSeen.Clear();
 
-        itemDict = new Dictionary<string, ItemRuntime>();
+        ItemDict = new Dictionary<string, ItemRuntime>();
 
         for (int i = 0; i < items.Length; i++)
         {
-            itemDict.Add(items[i].itemID, new ItemRuntime(items[i]));
+            ItemDict.Add(items[i].itemID, new ItemRuntime(items[i]));
         }
 
         // Adjust initial item state for rug and chain
-        itemDict["62Rug"].ItemState = 1;
-        itemDict["64Chain"].ItemState = 1;
+        ItemDict["62Rug"].ItemState = 1;
+        ItemDict["64Chain"].ItemState = 1;
     }
 
     // Sets the state for the given item
@@ -394,7 +421,7 @@ public class ItemController : MonoBehaviour
     {
         if (ItemExists(itemID, "SetItemState"))
         {
-            itemDict[itemID].ItemState = state;
+            ItemDict[itemID].ItemState = state;
         }
     }
 
@@ -402,16 +429,16 @@ public class ItemController : MonoBehaviour
     public void TallyTreasure(string itemID)
     {
         // Only tally items if they are treasure, not already seen and the cave is not closed
-        if (ItemExists(itemID, "TallyTreasure") && itemDict[itemID].IsTreasure && !treasuresSeen.Contains(itemID) && gameController.CurrentCaveStatus != CaveStatus.CLOSED)
+        if (ItemExists(itemID, "TallyTreasure") && itemLookup[itemID].isTreasure && !TreasuresSeen.Contains(itemID) && gameController.CurrentCaveStatus != CaveStatus.CLOSED)
         {
-            treasuresSeen.Add(itemID);
+            TreasuresSeen.Add(itemID);
         }
     }
 
     // Returns true if the given item is a treasure and has been seen by the player
     public bool TreasureWasSeen(string itemID)
     {
-        return ItemExists(itemID, "TreasureWasSeen") && treasuresSeen.Contains(itemID);
+        return ItemExists(itemID, "TreasureWasSeen") && TreasuresSeen.Contains(itemID);
     }
 
     // Returns the requested location of the given item
@@ -419,7 +446,7 @@ public class ItemController : MonoBehaviour
     {
         if (ItemExists(itemID, "Where"))
         {
-            return position == LOCATION_POSITION.SECOND_LOCATION ? itemDict[itemID].CurrentLocation2 : itemDict[itemID].CurrentLocation;
+            return position == LOCATION_POSITION.SECOND_LOCATION ? ItemDict[itemID].CurrentLocation2 : ItemDict[itemID].CurrentLocation;
         }
 
         return null;
@@ -432,12 +459,12 @@ public class ItemController : MonoBehaviour
     {
         if (location2 == null)
         {
-            itemDict[itemID].DropAt(location);
+            ItemDict[itemID].DropAt(location);
             
         }
         else
         {
-            itemDict[itemID].DropAt(location, location2);
+            ItemDict[itemID].DropAt(location, location2);
         }
     }
 
@@ -446,11 +473,11 @@ public class ItemController : MonoBehaviour
     {
         string resultString = "";
 
-        foreach (ItemRuntime item in itemDict.Values)
+        foreach (KeyValuePair<string, ItemRuntime> item in ItemDict)
         {
-            if (item.IsMovable == moveableState && item.IsAt(location))
+            if (item.Value.IsMovable == moveableState && item.Value.IsAt(location))
             {
-                string description = DescribeItem(item.ItemID);
+                string description = itemLookup[item.Key].descriptions[item.Value.ItemState];
                 if (description != null && description != "")
                 {
                     // If there was a previous item, add a carriage return first
@@ -471,7 +498,7 @@ public class ItemController : MonoBehaviour
     // Note: there is a public version of this with a different signature
     private bool ItemExists(string itemID, string methodName)
     {
-        if (itemDict.ContainsKey(itemID))
+        if (ItemDict.ContainsKey(itemID))
         {
             return true;
         }
@@ -496,3 +523,6 @@ public class ItemController : MonoBehaviour
         }
     }
 }
+
+// Used to indicate which of the two locations is being used in an operation
+public enum LOCATION_POSITION { EITHER_LOCATION, FIRST_LOCATION, SECOND_LOCATION }

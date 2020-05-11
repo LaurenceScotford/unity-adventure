@@ -1,6 +1,7 @@
 ﻿// Parser State
 // Managers the state of the command parser
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,19 +12,18 @@ public class ParserState : MonoBehaviour
     [SerializeField] private PlayerInput playerInput;
     [SerializeField] private TextDisplayController textDisplayController;
     [SerializeField] private PlayerMessageController playerMessageController;
-    private CommandToProcess[] commandsToProcess;       // The commands given by the player
-    private int commandBeingProcessed;                  // The index of the command currently being processed
+    public CommandToProcess[] commandsToProcess;       // The commands given by the player                  
 
     // === PROPERTIES ===
 
-    // Returns a list of commands currently being processed
-    public List<Command> CurrentCommands
+    // Returns a list of command IDs currently being processed
+    public List<string> CurrentCommands
     {
         get
         {
-            if (commandBeingProcessed != -1)
+            if (CommandBeingProcessed != -1)
             {
-                return commandsToProcess[commandBeingProcessed].commands;
+                return commandsToProcess[CommandBeingProcessed].commands;
             }
             else
             {
@@ -37,9 +37,9 @@ public class ParserState : MonoBehaviour
     {
         get
         {
-            if (commandBeingProcessed != -1)
+            if (CommandBeingProcessed != -1)
             {
-                return commandsToProcess[commandBeingProcessed].commandState;
+                return commandsToProcess[CommandBeingProcessed].commandState;
             }
             else
             {
@@ -49,9 +49,9 @@ public class ParserState : MonoBehaviour
 
         set
         {
-            if (commandBeingProcessed != -1)
+            if (CommandBeingProcessed != -1)
             {
-                commandsToProcess[commandBeingProcessed].commandState = value;
+                commandsToProcess[CommandBeingProcessed].commandState = value;
 
                 if (value == CommandState.VERB_IDENTIFIED)
                 {
@@ -79,9 +79,9 @@ public class ParserState : MonoBehaviour
 
         set
         {
-            if (commandBeingProcessed != -1)
+            if (CommandBeingProcessed != -1)
             {
-                commandsToProcess[commandBeingProcessed].subject = value;
+                commandsToProcess[CommandBeingProcessed].subject = value;
                 SubjectCarriedOver = null;
             }
         }
@@ -92,9 +92,9 @@ public class ParserState : MonoBehaviour
     {
         get
         {
-            if (commandBeingProcessed != -1)
+            if (CommandBeingProcessed != -1)
             {
-                return commandsToProcess[commandBeingProcessed].words;
+                return commandsToProcess[CommandBeingProcessed].words;
             }
             else
             {
@@ -108,9 +108,9 @@ public class ParserState : MonoBehaviour
     {
         get
         {
-            if (commandBeingProcessed != -1)
+            if (CommandBeingProcessed != -1)
             {
-                return commandsToProcess[commandBeingProcessed].activeCommand;
+                return commandsToProcess[CommandBeingProcessed].activeCommand;
             }
             else
             {
@@ -120,21 +120,21 @@ public class ParserState : MonoBehaviour
 
         set
         {
-            if (commandBeingProcessed != -1)
+            if (CommandBeingProcessed != -1)
             {
-                commandsToProcess[commandBeingProcessed].activeCommand = value;
+                commandsToProcess[CommandBeingProcessed].activeCommand = value;
             }
         }
     }
 
-    // Returns the active command
-    public Command ActiveCommand
+    // Returns the ID of the active command
+    public string ActiveCommand
     {
         get
         {
-            if (commandBeingProcessed != -1)
+            if (CommandBeingProcessed != -1)
             {
-                return commandsToProcess[commandBeingProcessed].commands[commandsToProcess[commandBeingProcessed].activeCommand];
+                return commandsToProcess[CommandBeingProcessed].commands[commandsToProcess[CommandBeingProcessed].activeCommand];
             }
             else
             {
@@ -143,26 +143,27 @@ public class ParserState : MonoBehaviour
         }
     }
     // Gets and sets the verb/subject carried over
-    public Command VerbCarriedOver { get; private set; }
-    public Command SubjectCarriedOver { get; private set; }
+    public string VerbCarriedOver { get; set; }
+    public string SubjectCarriedOver { get; set; }
+    public int CommandBeingProcessed { get; set; } // The index of the command currently being processed
 
     // === PUBLIC METHODS ===
 
     // Set the current command to be carried over as subject
     public void CarryOverSubject()
     {
-        if (commandBeingProcessed != -1 && commandsToProcess[commandBeingProcessed].subject != null)
+        if (CommandBeingProcessed != -1 && commandsToProcess[CommandBeingProcessed].subject != null)
         {
-            SubjectCarriedOver = commandsToProcess[commandBeingProcessed].commands[commandsToProcess[commandBeingProcessed].activeCommand];
+            SubjectCarriedOver = commandsToProcess[CommandBeingProcessed].commands[commandsToProcess[CommandBeingProcessed].activeCommand];
         }
     }
 
     // Set current command to be carried over as verb
     public void CarryOverVerb()
     {
-        if (commandBeingProcessed != -1 && commandsToProcess[commandBeingProcessed].commandState == CommandState.VERB_IDENTIFIED)
+        if (CommandBeingProcessed != -1 && commandsToProcess[CommandBeingProcessed].commandState == CommandState.VERB_IDENTIFIED)
         {
-            VerbCarriedOver = commandsToProcess[commandBeingProcessed].commands[commandsToProcess[commandBeingProcessed].activeCommand];
+            VerbCarriedOver = commandsToProcess[CommandBeingProcessed].commands[commandsToProcess[CommandBeingProcessed].activeCommand];
         }
     }
 
@@ -187,9 +188,9 @@ public class ParserState : MonoBehaviour
     // Returns the words entered for the command not currently being processed, or null if there was no second command
     public string[] GetOtherWordText()
     {
-        if (commandBeingProcessed != -1)
+        if (CommandBeingProcessed != -1)
         {
-            return commandsToProcess[1 - commandBeingProcessed].words;
+            return commandsToProcess[1 - CommandBeingProcessed].words;
         }
 
         return null;
@@ -199,29 +200,29 @@ public class ParserState : MonoBehaviour
     public bool NextCommandForProcessing()
     {
         // Find the first command that has not yet been processed
-        commandBeingProcessed = FindCommandWithState(CommandState.NOT_PROCESSED);
+        CommandBeingProcessed = FindCommandWithState(CommandState.NOT_PROCESSED);
 
         // If all commands have been processed, then finf the first command with a pending process that needs completion
-        if (commandBeingProcessed == -1)
+        if (CommandBeingProcessed == -1)
         {
-            commandBeingProcessed = FindCommandWithState(CommandState.PENDING);
+            CommandBeingProcessed = FindCommandWithState(CommandState.PENDING);
         }
 
         // If all commands have been processed and there are no pending commands then try to reprocess the verb
-        if (commandBeingProcessed == -1)
+        if (CommandBeingProcessed == -1)
         {
-            commandBeingProcessed = FindCommandWithState(CommandState.VERB_IDENTIFIED);
+            CommandBeingProcessed = FindCommandWithState(CommandState.VERB_IDENTIFIED);
         }
 
         // Indicate if there is still more processing to do
-        return commandBeingProcessed != -1;
+        return CommandBeingProcessed != -1;
     }
 
     // Resets the parser state with new commands. Returns true if there is processing to be done and false otherwise
     public bool ResetParserState(CommandWord[] words)
     {
         commandsToProcess = new CommandToProcess[2];
-        commandBeingProcessed = -1;
+        CommandBeingProcessed = -1;
 
         // Look for a match with available commands
         for (int i = 0; i < 2; i++)
@@ -261,21 +262,21 @@ public class ParserState : MonoBehaviour
         }
 
         // Now find the first unprocessed command and mark that as the current command
-        commandBeingProcessed = FindCommandWithState(CommandState.NOT_PROCESSED);
+        CommandBeingProcessed = FindCommandWithState(CommandState.NOT_PROCESSED);
 
         // If there's nothing to process
-        if (commandBeingProcessed == -1)
+        if (CommandBeingProcessed == -1)
         {
             // If nothing's been found to process but the carried over verb was Say, construct a new say verb and process that
-            if (VerbCarriedOver != null && VerbCarriedOver.CommandID == "2003Say")
+            if (VerbCarriedOver != null && VerbCarriedOver == "2003Say")
             {
                 commandsToProcess[1] = commandsToProcess[0];
                 CommandToProcess sayCommand = new CommandToProcess();
-                sayCommand.commands = new List<Command>() { VerbCarriedOver };
+                sayCommand.commands = new List<String>() { VerbCarriedOver };
                 sayCommand.commandState = CommandState.NOT_PROCESSED;
                 commandsToProcess[0] = sayCommand;
                 VerbCarriedOver = null;
-                commandBeingProcessed = 0;
+                CommandBeingProcessed = 0;
             }
             else
             {
@@ -285,7 +286,7 @@ public class ParserState : MonoBehaviour
         }
         
         // Return true if we found a command ready for processing and false otherwise
-        return commandBeingProcessed != -1;
+        return CommandBeingProcessed != -1;
     }
 
     // Attempts to set a carried over command for processing and returns true if the processing was successful and false otherwise, isItemWord is true if the command to be carried over is an ItemWord or false if an ActionWord
@@ -302,9 +303,9 @@ public class ParserState : MonoBehaviour
                 if (commandsToProcess[i].commandState != commandStateToLeaveIntact)
                 {
                     // ... and set it up to process the carried over command
-                    commandsToProcess[i].commands = new List<Command>() { isItemWord ? SubjectCarriedOver : VerbCarriedOver };
+                    commandsToProcess[i].commands = new List<string>() { isItemWord ? SubjectCarriedOver : VerbCarriedOver };
                     commandsToProcess[i].commandState = CommandState.NOT_PROCESSED;
-                    commandBeingProcessed = i;
+                    CommandBeingProcessed = i;
                     VerbCarriedOver = null;
                     SubjectCarriedOver = null;
                     return true;
@@ -316,10 +317,10 @@ public class ParserState : MonoBehaviour
     }
 
     // Substitutes current verb, if any, for a new command
-    public void SubstituteCommand(Command command)
+    public void SubstituteCommand(string command)
     {
-        commandsToProcess[commandBeingProcessed].commands = new List<Command>() { command };
-        commandsToProcess[commandBeingProcessed].commandState = CommandState.VERB_IDENTIFIED;
+        commandsToProcess[CommandBeingProcessed].commands = new List<string>() { command };
+        commandsToProcess[CommandBeingProcessed].commandState = CommandState.VERB_IDENTIFIED;
     }
 
       // Checks to see if the supplied term has been identfied as the verb and returns true if yes or false otherwise
@@ -327,7 +328,7 @@ public class ParserState : MonoBehaviour
     {
         int index = FindCommandWithState(CommandState.VERB_IDENTIFIED);
 
-        return index != -1 && commandsToProcess[index].commands[commandsToProcess[index].activeCommand].CommandID == verbID;
+        return index != -1 && commandsToProcess[index].commands[commandsToProcess[index].activeCommand] == verbID;
     }
 
      // =========== PRIVATE METHODS =======
@@ -345,15 +346,17 @@ public class ParserState : MonoBehaviour
 
         return -1;
     }
-
-    private struct CommandToProcess
-    {
-        public List<Command> commands;          // The potential commands for processing
-        public string[] words;                  // The word and word tail entered by the player that generated that command(s)
-        public CommandState commandState;       // The current status of the command
-        public string subject;                  // An item identfied as the subject of the command, or null if none / not an item word
-        public int activeCommand;               // The index of the command to use       
-    }
 }
+
+[Serializable]
+public struct CommandToProcess
+{
+    public List<string> commands;           // The IDs of potential commands for processing
+    public string[] words;                  // The word and word tail entered by the player that generated that command(s)
+    public CommandState commandState;       // The current status of the command
+    public string subject;                  // An item identfied as the subject of the command, or null if none / not an item word
+    public int activeCommand;               // The index of the command to use       
+}
+
 // Used to indicate the current status of a command being processed
 public enum CommandState { NO_COMMAND, NOT_PROCESSED, DISCARDED, PENDING, VERB_IDENTIFIED, SUBJECT_IDENTIFIED };

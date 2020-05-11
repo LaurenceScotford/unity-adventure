@@ -29,13 +29,7 @@ public class LocationController : MonoBehaviour
     {
         "0Death", "OutOfPlay", "Player"
     };
-
-    // Keeps track of number of times each location is viewed (used to determine whether long or short description is shown
-    private Dictionary<string, int> locViews = new Dictionary<string, int>();       
     
-    private int timesToAbbreviateLocation;  // The number of times a short location description should be shown before the long description is shown again
-    private int detailMsgCount;             // Keeps track of how many times player has been warned about not giving more detail
- 
     // === PROPERTIES ===
 
     // References to parts of the game engine used by locations
@@ -49,9 +43,15 @@ public class LocationController : MonoBehaviour
     {
         get
         {
-            return locViews.Count > 1;
+            return LocViews.Count > 1;
         }
     }
+
+    public int TimesToAbbreviateLocation { get ; set; } // The number of times a short location description should be shown before the long description is shown again
+    public int DetailMsgCount { get; set; }             // Keeps track of how many times player has been warned about not giving more detail
+    public Dictionary<string, int> LocViews { get; set; } = new Dictionary<string, int>();  // Keeps track of number of times each location is viewed (used to determine whether long or short description is shown
+
+
 
     // === MONOBEHAVIOUR METHODS ===
 
@@ -93,22 +93,22 @@ public class LocationController : MonoBehaviour
         if (LocationExists(locationID, "DescribeLocation"))
         {
             // Check if this location has been visited before
-            if (!locViews.ContainsKey(locationID))
+            if (!LocViews.ContainsKey(locationID))
             {
                 // This is the first visit, so start tracking number of views
-                locViews.Add(locationID, 0);
+                LocViews.Add(locationID, 0);
             }
 
             // Show long or short description based on number of views
             description = locationsDict[locationID].ShortDescription;
 
-            if (locViews[locationID] % timesToAbbreviateLocation == 0)
+            if (LocViews[locationID] % TimesToAbbreviateLocation == 0)
             {
                 description = locationsDict[locationID].LongDescription;
             }
 
             // Increment number of views for this location
-            locViews[locationID]++;
+            LocViews[locationID]++;
         }
 
         return description;
@@ -224,29 +224,29 @@ public class LocationController : MonoBehaviour
     public CommandOutcome Look()
     {
         // If it has not yet been shown three times, show the no more detail warning and increase the count of times shown
-        if (detailMsgCount < 3)
+        if (DetailMsgCount < 3)
         {
             textDisplayController.AddTextToLog(playerMessageController.GetMessage("15NoMoreDetail"));
-            detailMsgCount++;
+            DetailMsgCount++;
         }
 
-        locViews[playerController.CurrentLocation] = 0;
+        LocViews[playerController.CurrentLocation] = 0;
         return CommandOutcome.DESCRIBE;
     }
 
     // Resets the trcked locations to a new game state
     public void ResetLocations()
     {
-        detailMsgCount = 0;
-        timesToAbbreviateLocation = 5;
-        locViews.Clear();
+        DetailMsgCount = 0;
+        TimesToAbbreviateLocation = 5;
+        LocViews.Clear();
     }
 
     // Surpresses use of long descriptions except when player uses a LOOK command
     public void SetBriefMode()
     {
-        timesToAbbreviateLocation = 10000;
-        detailMsgCount = 3;
+        TimesToAbbreviateLocation = 10000;
+        DetailMsgCount = 3;
     }
 
     // Returns a structure detailing the sound that can be heard at the location and whether it drowns out other sounds

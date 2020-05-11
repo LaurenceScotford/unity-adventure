@@ -58,7 +58,8 @@ public class Save : Action
     public void YesSave()
     {
         scoreController.AddSavePenalty();
-        // TO DO: Save the game
+
+        
     }
 
     // === Handler for the no response to save question ===

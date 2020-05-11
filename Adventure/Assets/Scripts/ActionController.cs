@@ -42,7 +42,7 @@ public class ActionController : MonoBehaviour
     public QuestionController QC { get { return questionController; } }
     public ScoreController SC { get { return scoreController; } }
 
-    public int Foobar { get; private set; }     // Used to track the FEE FIE FOE sequence
+    public int Foobar { get; set; }     // Used to track the FEE FIE FOE sequence
 
 
     // === MONOBEHAVIOUR METHODS ===
