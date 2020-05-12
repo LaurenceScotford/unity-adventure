@@ -33,7 +33,9 @@ public class FeeFieFoe : Action
     public override CommandOutcome DoAction()
     {
         // If player tried to use a second word, force default message
-        if (parserState.GetOtherWordText() != null)
+        string[] otherword = parserState.GetOtherWordText();
+
+        if (otherword != null && otherword[0].ToUpper() != "SAY")
         {
             parserState.CurrentCommandState = CommandState.DISCARDED;
             return CommandOutcome.NO_COMMAND;

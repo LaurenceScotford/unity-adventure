@@ -319,7 +319,7 @@ public class ItemController : MonoBehaviour
     {
         if (ItemExists(itemID, "ListenToItem"))
         {
-            return itemLookup[itemID].descriptions[ItemDict[itemID].ListenOffset];
+            return itemLookup[itemID].descriptions[ItemDict[itemID].ItemState + ItemDict[itemID].ListenOffset];
         }
 
         return null;

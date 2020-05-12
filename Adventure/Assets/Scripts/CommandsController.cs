@@ -56,14 +56,16 @@ public class CommandsController : MonoBehaviour
         // If the word to match is the generated magic word then change it to match the default pattern
         if (wordToMatch == MagicWordText)
         {
-            wordToMatch = "Z'ZZZ";
+            matchedCommands.Add("2034Z'zzz");
         }
-
-        foreach (Command command in commandsDict.Values)
+        else
         {
-            if (command.matchesWord(wordToMatch.ToUpper()))
+            foreach (Command command in commandsDict.Values)
             {
-                matchedCommands.Add(command.CommandID);
+                if (command.matchesWord(wordToMatch.ToUpper()))
+                {
+                    matchedCommands.Add(command.CommandID);
+                }
             }
         }
 
@@ -101,8 +103,8 @@ public class CommandsController : MonoBehaviour
                 }
             }
 
-            // Any command other than the FEE FIE FOE sequence will break the sequence
-            if (command.CommandID != "2025FeeFieFoe")
+            // Any command other than the FEE FIE FOE sequence or SAY will break the sequence
+            if (command.CommandID != "2025FeeFieFoe" && command.CommandID != "2003Say")
             {
                 actionController.ResetFoobar();
             }

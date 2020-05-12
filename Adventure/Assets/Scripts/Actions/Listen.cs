@@ -70,7 +70,7 @@ public class Listen : Action
                     string soundText = itemController.ListenToItem(item);
 
                     // If the bird is singing about its freedom in the forest, we need to add magic word and the bird disappears forever
-                    if (item == BIRD && itemController.GetItemState(BIRD) == 2)
+                    if (item == BIRD && soundText.Contains("~"))
                     {
                         soundText = playerMessageController.AssembleTextWithParams(soundText, new string[] { commandsController.MagicWordText });
                         itemController.DestroyItem(BIRD);

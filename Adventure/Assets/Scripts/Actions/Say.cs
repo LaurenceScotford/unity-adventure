@@ -14,7 +14,7 @@ public class Say : Action
     private PlayerMessageController playerMessageController;
     private CommandsController commandsController;
 
-    private readonly List<string> magicWords = new List<string>() { "62Xyzzy", "65Plugh", "71Plover", "2025FeeFieFoe", "2034SecretWord" };
+    private readonly List<string> magicWords = new List<string>() { "62Xyzzy", "65Plugh", "71Plover", "2025FeeFieFoe", "2034Z'zzz" };
 
     // === CONSTRUCTOR ===
 
@@ -36,6 +36,7 @@ public class Say : Action
         string[] otherWord = parserState.GetOtherWordText();
 
         CommandOutcome outcome = CommandOutcome.NO_COMMAND;
+        bool resetFoobar = true;
 
         // If there were any 
         if (otherWord != null)
@@ -49,6 +50,11 @@ public class Say : Action
                 
                if (magicWords.Contains(command))
                 {
+                    if (command == "2025FeeFieFoe")
+                    {
+                        resetFoobar = false;
+                    }
+
                     foundMagicWord = true;
                     break;
                 }
@@ -71,6 +77,12 @@ public class Say : Action
             parserState.CarryOverVerb();
             textDisplayController.AddTextToLog(playerMessageController.GetMessage("257VerbWhat", parserState.Words));
             parserState.CurrentCommandState = CommandState.NO_COMMAND; // Indicate we're done with this command
+        }
+
+        // If used with anything other than the Fee Fie Foe sequence, then reset foobar
+        if (resetFoobar)
+        {
+            controller.ResetFoobar();
         }
 
         return outcome;

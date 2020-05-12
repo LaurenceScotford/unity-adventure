@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: 2034Z'zzz
   m_EditorClassIdentifier: 
   commandID: 2034Z'zzz
-  words:
-  - Z'ZZZ
+  words: []
   defaultMessageID: 42NothingHappens
   actionID: z'zzz
