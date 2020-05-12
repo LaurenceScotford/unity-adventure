@@ -15,6 +15,7 @@ MonoBehaviour:
   itemID: 49Sign
   isMovable: 0
   isTreasure: 0
+  treasurePoints: 0
   itemName: '*sign'
   descriptions:
   - 

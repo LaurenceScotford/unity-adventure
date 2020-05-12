@@ -15,9 +15,12 @@ MonoBehaviour:
   itemID: 3Grate
   isMovable: 0
   isTreasure: 0
+  treasurePoints: 0
   itemName: '*grate'
   descriptions:
   - The grate is locked.
   - The grate is open.
+  listenOffset: -1
+  readOffset: -1
   initialLocation: 8OutsideGrate
   initialLocation2: 9BelowTheGrate

@@ -61,17 +61,30 @@ public class Read : Action
         if (isDark)
         {
             // If it's dark, can't see object to read it
-            textDisplayController.AddTextToLog(playerMessageController.GetMessage("256ISeeNo", parserState.Words));
-        }
-        else if (itemToRead != "15Oyster" || scoreController.ClosedHintShown)
-        {
-            textDisplayController.AddTextToLog(itemController.ReadItem(itemToRead));
+            textDisplayController.AddTextToLog(playerMessageController.GetMessage("256ISeeNo", parserState.GetOtherWordText()));
         }
         else
         {
-            // Oyster is a special case 
-            questionController.RequestQuestionResponse("192Clue", "193ReadClue", "54OK", OysterYes, null);
-            outcome = CommandOutcome.QUESTION;
+            string itemText = itemController.ReadItem(itemToRead);
+
+            if (itemText != null)
+            {
+                if (itemToRead != "15Oyster" || scoreController.ClosedHintShown)
+                {
+                    textDisplayController.AddTextToLog(itemText);
+                }
+                else
+                {
+                    // Oyster is a special case when read after cave closed before hint has been revealed
+                    questionController.RequestQuestionResponse("192Clue", "193ReadClue", "54OK", OysterYes, null);
+                    outcome = CommandOutcome.QUESTION;
+                }
+            }
+            else
+            {
+                parserState.CurrentCommandState = CommandState.DISCARDED;
+                return CommandOutcome.NO_COMMAND;
+            }
         }
 
         parserState.CommandComplete();

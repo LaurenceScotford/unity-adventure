@@ -377,12 +377,13 @@ public class ItemController : MonoBehaviour
         return count;
     }
 
-    // Returns a string with the outcome of reading the given item
+    // Returns a string with the outcome of reading the given item - or null if the item can't be read
     public string ReadItem(string itemID)
     {
         if (ItemExists(itemID, "ReadItem"))
         {
-            return itemLookup[itemID].descriptions[ItemDict[itemID].ReadOffset];
+            int readOffset = ItemDict[itemID].ReadOffset;
+            return readOffset >= 0 ? itemLookup[itemID].descriptions[readOffset] : null;
         }
 
         return null;
@@ -475,7 +476,7 @@ public class ItemController : MonoBehaviour
 
         foreach (KeyValuePair<string, ItemRuntime> item in ItemDict)
         {
-            if (item.Value.IsMovable == moveableState && item.Value.IsAt(location))
+            if (item.Value.IsMovable == moveableState && item.Value.IsAt(location) && item.Value.ItemState >=0)
             {
                 string description = itemLookup[item.Key].descriptions[item.Value.ItemState];
                 if (description != null && description != "")

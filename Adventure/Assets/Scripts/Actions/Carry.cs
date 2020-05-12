@@ -60,6 +60,9 @@ public class Carry : Action
             return outcome;
         }
 
+        // Remove any negative item state (possibly set when cave closed)
+        itemController.SetItemState(itemToCarry, UnityEngine.Mathf.Abs(itemController.GetItemState(itemToCarry)));
+
         // Carry the item
         playerController.CarryItem(itemToCarry);
 
