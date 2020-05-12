@@ -61,7 +61,13 @@ public class Carry : Action
         }
 
         // Remove any negative item state (possibly set when cave closed)
-        itemController.SetItemState(itemToCarry, UnityEngine.Mathf.Abs(itemController.GetItemState(itemToCarry)));
+        int itemState = itemController.GetItemState(itemToCarry);
+
+        if (itemState < 0)
+        {
+            itemState = -1 - itemState;
+            itemController.SetItemState(itemToCarry, itemState);
+        }
 
         // Carry the item
         playerController.CarryItem(itemToCarry);
@@ -72,7 +78,7 @@ public class Carry : Action
             case "4Cage": 
             case "8Bird":
                 // If the player has carried the bird or cage and the bird is currently in the cage...
-                if (itemController.GetItemState("8Bird") == 1)
+                if (itemState == 1)
                 {
                     // ... then carry the other item as well
                     string otherItemToCarry = itemToCarry == "4Cage" ? "8Bird" : "4Cage";
@@ -81,11 +87,10 @@ public class Carry : Action
                 break;
             case "20Bottle":
                 // If the player has carried the bottle, and the bottle has liquid in it...
-                int bottleState = itemController.GetItemState(itemToCarry);
-                if ( bottleState == 0 || bottleState == 2)
+                if ( itemState == 0 || itemState == 2)
                 {
                     // ... then carry the relevant liquid as well
-                    string otherItemToCarry = bottleState == 0 ? "21Water" : "22Oil";
+                    string otherItemToCarry = itemState == 0 ? "21Water" : "22Oil";
                     playerController.CarryItem(otherItemToCarry);
                 }
                 break;
@@ -94,7 +99,7 @@ public class Carry : Action
             case "67Amber":
             case "68Sapphire":
                 // If the player has carried a gemstone and the gemstone was in the cavity...
-                if (itemController.GetItemState(itemToCarry) != 0)
+                if (itemState != 0)
                 {
                     //... then indicate the gemstone is no longer in the cavity and the cavity is now empty
                     itemController.SetItemState(itemToCarry, 0);

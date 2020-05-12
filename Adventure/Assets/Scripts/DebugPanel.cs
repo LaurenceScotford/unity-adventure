@@ -32,22 +32,84 @@ public class DebugPanel : MonoBehaviour
     private string itemID;      // Item ID entered
     private int numVal;         // numeric value entered 
 
+    // === PROPERTIES ===
+
+    // Whether the game is playing or not (displays an error message if not)
+    private bool GamePlaying { 
+        get
+        {
+            bool isPlaying = gameController.CurrentGameStatus == GameStatus.PLAYING;
+
+            if (!isPlaying)
+            {
+                ShowMessage("The game is over! Start a new game first...", true);
+            }
+
+            return isPlaying;
+        }
+    }
+
+    // Returns true if the item ID entered is valid and sets this as the item to use, otherwise shows a warning message and returns false 
+    private bool ValidItem
+    {
+        get
+        {
+            string itemStr = item.text.Trim();
+
+            if (itemStr != "" && itemController.ItemExists(itemStr))
+            {
+                ClearMessage();
+                itemID = itemStr;
+                return true;
+            }
+            else
+            {
+                ShowMessage("Invalid item ID", true);
+                return false;
+            }
+        }
+    }
+
+    // Returns true if the location ID entered is valid and sets this as the location to use, otherwise shows a warning message and returns false 
+    private bool ValidLocation
+    {
+        get
+        {
+            string locStr = location.text.Trim();
+
+            if (locStr != "" && locationController.LocationExists(locStr))
+            {
+                ClearMessage();
+                locationID = locStr;
+                return true;
+            }
+            else
+            {
+                ShowMessage("Invalid location ID", true);
+                return false;
+            }
+        }
+    }
+
     // === PUBLIC METHODS ===
 
     // Give the player the lamp and turn it on
     public void GetLitLamp()
     {
-        ShowMessage("Getting lit lamp", false);
-        const string LAMP = "2Lantern";
-        itemController.SetItemState(LAMP, 1);
-        itemController.DropItemAt(LAMP, "Player");
-        gameController.ProcessTurn(CommandOutcome.DESCRIBE);
+        if (GamePlaying)
+        {
+            ShowMessage("Getting lit lamp", false);
+            const string LAMP = "2Lantern";
+            itemController.SetItemState(LAMP, 1);
+            itemController.DropItemAt(LAMP, "Player");
+            gameController.ProcessTurn(CommandOutcome.DESCRIBE);
+        }
     }
 
     // If a valid location ID has been entered, moves the player to that location and shows a confirmatory message
     public void GoToLocation()
     {
-        if (ValidLocation())
+        if (GamePlaying && ValidLocation)
         {
             ShowMessage("Moving to " + locationID, false);
             playerController.GoTo(locationID, true);
@@ -58,7 +120,7 @@ public class DebugPanel : MonoBehaviour
     // If a valid location ID and item ID have been entered, moves the item to that location and shows a confirmatory message
     public void MoveItem()
     {
-        if (ValidLocation() && ValidItem())
+        if (GamePlaying && ValidLocation && ValidItem)
         {
             ShowMessage("Moving " + itemID + " to " + locationID, false);
             itemController.DropItemAt(itemID, locationID);
@@ -68,7 +130,7 @@ public class DebugPanel : MonoBehaviour
     // If a valid item ID and state have been entered, sets the item to that state and shows a confirmatory message
     public void SetItemState()
     {
-        if (ValidItem() && ValidNumber(true))
+        if (GamePlaying && ValidItem && ValidNumber(true))
         {
             ShowMessage(itemID + " set to " + numVal, false);
             itemController.SetItemState(itemID, numVal);
@@ -78,7 +140,7 @@ public class DebugPanel : MonoBehaviour
     // If a valid number has been entered, set the lamp life
     public void SetLampLife()
     {
-        if (ValidNumber(false))
+        if (GamePlaying && ValidNumber(false))
         {
             ShowMessage("Lamp Life set to " + numVal, false);
             gameController.LampLife = numVal;
@@ -89,7 +151,7 @@ public class DebugPanel : MonoBehaviour
     // If a valid number has been entered, set the number of turns
     public void SetTurns()
     {
-        if (ValidNumber(false))
+        if (GamePlaying && ValidNumber(false))
         {
             ShowMessage("Turns set to " + numVal, false);
             gameController.Turns = numVal;
@@ -100,17 +162,38 @@ public class DebugPanel : MonoBehaviour
     // Close the cave
     public void CloseCave()
     {
-        ShowMessage("Closing Cave", false);
-        gameController.StartEndGame();
-        UpdateDebugPanel();
+        if (GamePlaying)
+        {
+            ShowMessage("Closing Cave", false);
+
+            // If still fully open, run closing sequence first to maintain stable game state
+            if (gameController.CurrentCaveStatus == CaveStatus.OPEN)
+            {
+                gameController.StartClosing();
+            }
+
+            if (gameController.CurrentCaveStatus == CaveStatus.CLOSING)
+            {
+                gameController.StartEndGame();
+            }
+            else
+            {
+                ShowMessage("Cave already closed!", true);
+            }
+
+            UpdateDebugPanel();
+        }
     }
 
     // Starts the cave closing sequence
     public void StartClosing() 
     {
-        ShowMessage("Starting Closing Sequence", false);
-        gameController.StartClosing();
-        UpdateDebugPanel();
+        if (GamePlaying)
+        {
+            ShowMessage("Starting Closing Sequence", false);
+            gameController.StartClosing();
+            UpdateDebugPanel();
+        }
     }
 
     public void ToggleBottomPanel()
@@ -152,30 +235,12 @@ public class DebugPanel : MonoBehaviour
         message.text = msg;
     }
 
-    // Returns true if the item ID entered is valid and sets this as the item to use, otherwise shows a warning message and returns false 
-    private bool ValidItem()
-    {
-        string itemStr = item.text.Trim();
-
-        if (itemStr != "" && itemController.ItemExists(itemStr))
-        {
-            ClearMessage();
-            itemID = itemStr;
-            return true;
-        }
-        else
-        {
-            ShowMessage("Invalid item ID", true);
-            return false;
-        }
-    }
-
     // Returns true if the number entered is valid and sets this as the value to use, otherwise shows a warning message and returns false
     private bool ValidNumber(bool negAllowed)
     {
         int enteredVal;
 
-        if (Int32.TryParse(numericValue.text.Trim(), out enteredVal) && (negAllowed || enteredVal >=0))
+        if (Int32.TryParse(numericValue.text.Trim(), out enteredVal) && (negAllowed || enteredVal >= 0))
         {
             ClearMessage();
             numVal = enteredVal;
@@ -184,24 +249,6 @@ public class DebugPanel : MonoBehaviour
         else
         {
             ShowMessage("Invalid number", true);
-            return false;
-        }
-    }
-
-    // Returns true if the location ID entered is valid and sets this as the location to use, otherwise shows a warning message and returns false 
-    private bool ValidLocation()
-    {
-        string locStr = location.text.Trim();
-
-        if (locStr != "" && locationController.LocationExists(locStr))
-        {
-            ClearMessage();
-            locationID = locStr;
-            return true;
-        }
-        else
-        {
-            ShowMessage("Invalid location ID", true);
             return false;
         }
     }

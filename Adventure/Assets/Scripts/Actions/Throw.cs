@@ -92,11 +92,8 @@ public class Throw : Action
         // In all other circumstances...
         else
         {
-            // ...construct a drop command with this item and execute that instead
-            CommandWord dropCommand = new CommandWord("DROP", null);
-            CommandWord itemCommand = new CommandWord(parserState.Words[0], null);
-            parserState.ResetParserState(new CommandWord[2] { dropCommand, itemCommand });
-            return CommandOutcome.NO_COMMAND;
+            // ...execute a drop command instead
+            return controller.ExecuteAction("drop");
         }
 
         if (throwMsg != null)
