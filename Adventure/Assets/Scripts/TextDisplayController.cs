@@ -27,13 +27,15 @@ public class TextDisplayController : MonoBehaviour
         {
             textLog.Add(textToAdd);
         }
-        
-        // Only the last 200 entries are kept
-        if (textLog.Count > 200)
-        {
-            textLog.RemoveAt(0);
-        }
+
         textLogView.text = string.Join("\n\n", textLog.ToArray()) + "\n";
+
+        //// If mesh is getting too large, cull the oldest log item (it will be removed on next update)
+        //if (textLogView.text. > 200)
+        //{
+        //    textLog.RemoveAt(0);
+        //}
+       
         StartCoroutine(UpdateTextDisplay());
     }
 

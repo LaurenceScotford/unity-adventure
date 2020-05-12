@@ -55,12 +55,14 @@ public class Wave : Action
         bool hasItem = playerController.HasItem(itemToWave);
         bool isRod = itemToWave == "5BlackRod";
         bool birdHere = playerController.ItemIsPresent("8Bird");
-        bool atFissure = location == "17EastFissure";
+        bool atFissure = location == "17EastFissure" || location == "27WestFissure";
         bool closing = gameController.CurrentCaveStatus == CaveStatus.CLOSING;
 
         if (!hasItem && (!isRod || !playerController.HasItem("6BlackRod")))
         {
-            waveMsg[0] = "29DontHaveIt";
+            textDisplayController.AddTextToLog(playerMessageController.GetMessage("29DontHaveIt"));
+            parserState.CommandComplete();
+            return CommandOutcome.MESSAGE;
         }
 
         // Wave will have no effect in these circumstances
@@ -71,7 +73,6 @@ public class Wave : Action
         }
 
         CommandOutcome outcome = CommandOutcome.MESSAGE;
-        bool necklaceFound = false;
 
         // If the bird is here...
         if (birdHere)
@@ -81,14 +82,13 @@ public class Wave : Action
                 // ... and bird is uncaged...
                 case 0:
                     // ... if at steps and jade necklace not yet found...
-                    if (itemController.ItemIsAt("7Steps", location) && !itemController.ItemInPlay("66Necklace"))
+                    if (location == "14TopOfPit" && !itemController.ItemInPlay("66Necklace"))
                     {
                         // ... bird retrieves jade necklace...
                         itemController.DropItemAt("66Necklace", location);
                         // Tally a treasure
                         itemController.TallyTreasure("66Necklace");
                         waveMsg[0] = "208BirdRetrieveNecklace";
-                        necklaceFound = true;
                     }
                     else
                     {
@@ -101,12 +101,12 @@ public class Wave : Action
                     waveMsg[0] = "207BirdAgitatedCage";
                     break;
             }
-        }
-        
-        // If cave is closed, this action will wake the dwarves
-        if (gameController.CurrentCaveStatus == CaveStatus.CLOSED && !necklaceFound)
-        {
-            outcome = CommandOutcome.DISTURBED;
+
+            // If cave is closed, this action will wake the dwarves
+            if (gameController.CurrentCaveStatus == CaveStatus.CLOSED)
+            {
+                outcome = CommandOutcome.DISTURBED;
+            }
         }
         // If we're at the fissure and it's not closing
         else if (atFissure && !closing)
