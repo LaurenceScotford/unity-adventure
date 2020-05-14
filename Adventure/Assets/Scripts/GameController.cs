@@ -72,6 +72,10 @@ public class GameController : MonoBehaviour
                 textDisplayController.ResetTextDisplay();
                 questionController.RequestQuestionResponse("65Welcome", "1Instructions", null, InstructionsResponseYes, InstructionsResponseNo);
                 break;
+            case "continue":
+                break;
+            case "load":
+                break;
         }
     }
 

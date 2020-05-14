@@ -151,6 +151,17 @@ public class DwarfController : MonoBehaviour
             }
         }
 
+        // Temp debug code
+        string dwarfText = "Dwarf Activation Level: " + ActivationLevel + "\n";
+        dwarfText += "Treasure Chest in play: " + itemController.ItemInPlay("55Chest");
+
+        for (int i = 0; i < Dwarves.Length; i++)
+        {
+            dwarfText += "Dwarf: " + i + " is " + Dwarves[i].Status + " and at " + Dwarves[i].DwarfLocation + "\n";
+        }
+        Debug.Log(dwarfText);
+        // End of temp code
+
         return false;
     }
 

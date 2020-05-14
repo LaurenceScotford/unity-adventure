@@ -1,6 +1,8 @@
 ﻿// Wave
 // Executes WAVE command
 
+using System.Collections.Generic;
+
 public class Wave : Action
 {
     // === MEMBER VARIABLES ===
@@ -51,7 +53,7 @@ public class Wave : Action
             return CommandOutcome.NO_COMMAND;
         }
 
-        string[] waveMsg = new string[2] {null, null};
+        List<string> waveMsg = new List<string>();
         bool hasItem = playerController.HasItem(itemToWave);
         bool isRod = itemToWave == "5BlackRod";
         bool birdHere = playerController.ItemIsPresent("8Bird");
@@ -88,17 +90,17 @@ public class Wave : Action
                         itemController.DropItemAt("66Necklace", location);
                         // Tally a treasure
                         itemController.TallyTreasure("66Necklace");
-                        waveMsg[0] = "208BirdRetrieveNecklace";
+                        waveMsg.Add(playerMessageController.GetMessage("208BirdRetrieveNecklace"));
                     }
                     else
                     {
                         // ... otherwise bird just got agitated
-                        waveMsg[0] = "206BirdAgitated";
+                        waveMsg.Add(playerMessageController.GetMessage("206BirdAgitated"));
                     }
                     break;
                 case 1:
                     // ... bird got agitated in cage
-                    waveMsg[0] = "207BirdAgitatedCage";
+                    waveMsg.Add(playerMessageController.GetMessage("207BirdAgitatedCage"));
                     break;
             }
 
@@ -108,22 +110,23 @@ public class Wave : Action
                 outcome = CommandOutcome.DISTURBED;
             }
         }
+
         // If we're at the fissure and it's not closing
-        else if (atFissure && !closing)
+        if (atFissure && !closing)
         {
             //Toggle crystal bridge state and show appropriate message
             int fissureState = itemController.GetItemState("12Fissure");
             itemController.SetItemState("12Fissure", fissureState + 1);
-            textDisplayController.AddTextToLog(itemController.DescribeItem("12Fissure"));
+            waveMsg.Add(itemController.DescribeItem("12Fissure"));
             itemController.SetItemState("12Fissure", 1 - fissureState);
         }
 
         // Show any messages generated and end this command
-        for (int i = 0; i < waveMsg.Length; i++)
+        for (int i = 0; i < waveMsg.Count; i++)
         {
             if (waveMsg[i] != null)
             {
-                textDisplayController.AddTextToLog(playerMessageController.GetMessage(waveMsg[i]));
+                textDisplayController.AddTextToLog(waveMsg[i]);
             }
         }
 

@@ -20,9 +20,6 @@ public class TextDisplayController : MonoBehaviour
     // Adds new text to the narrative log and displays it
     public void AddTextToLog(string textToAdd)
     {
-        textLogView.text = "";
-        Canvas.ForceUpdateCanvases();
-
         if (textToAdd != null && textToAdd != "")
         {
             textLog.Add(textToAdd);
