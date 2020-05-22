@@ -1,7 +1,7 @@
 ﻿// Item Runtime
 // Represents a single item at runtime - generated from an Item scriptableobject
 
-
+[System.Serializable]
 public class ItemRuntime
 {
     // === PROPERTIES ===

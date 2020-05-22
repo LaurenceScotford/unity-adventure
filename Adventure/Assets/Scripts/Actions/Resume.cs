@@ -4,6 +4,7 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Resume : Action
 {
@@ -33,6 +34,9 @@ public class Resume : Action
 
         // Define behaviour for getting a subject
         subjectOptional = true;
+
+        // Create question used by this action
+        questionController.AddQuestion("resume", new Question("200Acceptable", "54OK", "54OK", false, YesResume, NoDontResume));
     }
 
     // === PUBLIC METHODS ===
@@ -53,7 +57,7 @@ public class Resume : Action
         if (locationController.MovedBeyondStart)
         {
             textDisplayController.AddTextToLog(playerMessageController.GetMessage("268ResumeInstruction"));
-            questionController.RequestQuestionResponse("200Acceptable", "54OK", "54OK", YesResume, NoDontResume);
+            questionController.RequestQuestionResponse("resume");
             outcome = CommandOutcome.QUESTION;
         }
         else
@@ -71,11 +75,15 @@ public class Resume : Action
         return null;
     }
 
-    // Handler for yes reponse to resume question
+    // Handler for yes reponse to resume question - Makes a continuation save first, in case player cancels and wants to resume current game
     public void YesResume()
     {
-       // TO DO: Resume game
-
+        if (gameController.ContinuationSave())
+        {
+            PlayerPrefs.SetString("OriginatingScene", "Game");
+            PlayerPrefs.SetString("LoadSaveMode", "load");
+            SceneManager.LoadScene("LoadSaveGame");
+        }
     }
 
     // Handler for no response to resume question

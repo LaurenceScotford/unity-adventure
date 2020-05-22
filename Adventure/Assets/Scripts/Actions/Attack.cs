@@ -12,6 +12,7 @@ public class Attack : Action
     private PlayerController playerController;
     private ItemController itemController;
     private DwarfController dwarfController;
+    private QuestionController questionController;
     private TextDisplayController textDisplayController;
     private PlayerMessageController playerMessageController;
     private PlayerInput playerInput;
@@ -41,12 +42,16 @@ public class Attack : Action
         playerController = controller.PC;
         itemController = controller.IC;
         dwarfController = controller.DC;
+        questionController = controller.QC;
         textDisplayController = controller.TDC;
         playerMessageController = controller.PMC;
         playerInput = controller.PI;
 
         // Define behaviour for getting a subject
         subjectOptional = false;
+
+        // Add question used by this action
+        questionController.AddQuestion("attack", new Question("49BareHands", null, null, true, DragonResponseYes, DragonResponseNo));
     }
 
     // === PUBLIC METHODS ===
@@ -239,10 +244,8 @@ public class Attack : Action
         }
         else
         {
-            // Ask player if they plan to attack with bare hands and temporarily divert command processing to a bespoke method to monitor for a response to this question
-            gameController.SuspendCommandProcessing();
-            PlayerInput.commandsEntered = DragonResponse;
-            attackText = playerMessageController.GetMessage("49BareHands");
+            // Ask player if they plan to attack with bare hands and wait for a response to this question
+            questionController.RequestQuestionResponse("attack");
             return CommandOutcome.QUESTION;
         }
     }
@@ -309,46 +312,36 @@ public class Attack : Action
         return CommandOutcome.MESSAGE;
     }
 
-    // Temporary handler for commands - monitors immediate response after player is asked if they want to attack dragon with their bare hands
-    private void DragonResponse()
+    // Processes input as a normal command if player doesn't respond yes to dragon attack question
+    private void DragonResponseNo()
+    {
+        // The player did not give a positive response to the question, so process it like any other command
+        gameController.GetPlayerCommand();
+    }
+
+    // Kills dragon if the player responds yes to dragon attack question
+    private void DragonResponseYes()
     {
         const string RUG = "62Rug";
+        location = playerController.CurrentLocation;
 
-        // Remove this special case handler
-        PlayerInput.commandsEntered = null;
+        // Tell them they've killed the dragon
+        itemController.SetItemState(DRAGON, 3);
+        textDisplayController.AddTextToLog(itemController.DescribeItem(DRAGON));
 
-        // Now resume normal command processing
-        gameController.ResumeCommandProcessing();
+        // Actually kill the dragon
+        itemController.SetItemState(DRAGON, 1);
 
-        // Get player's response
-        string response = playerInput.Words[0].activeWord.ToUpper();
+        // Move rug here and make it movable
+        itemController.DropItemAt(RUG, location);
+        itemController.MakeItemMovable(RUG);
+        itemController.SetItemState(RUG, 0);
 
-        // If they've answered the question positively...
-        if (response == "Y" || response == "YES")
-        {
-            // Tell them they've killed the dragon
-            itemController.SetItemState(DRAGON, 3);
-            textDisplayController.AddTextToLog(itemController.DescribeItem(DRAGON));
+        // Move the blood here
+        itemController.DropItemAt("44Blood", location);
 
-            // Actually kill the dragon
-            itemController.SetItemState(DRAGON, 1);
-
-            // Move rug here and make it movable
-            itemController.DropItemAt(RUG, location);
-            itemController.MakeItemMovable(RUG);
-            itemController.SetItemState(RUG, 0);
-
-            // Move the blood here
-            itemController.DropItemAt("44Blood", location);
-
-            // Force the location to be described again
-            gameController.ProcessTurn(CommandOutcome.DESCRIBE);
-        }
-        else
-        {
-            // The player did not give a positive response to the question, so process it like any other command
-            gameController.GetPlayerCommand();
-        }
+        // Force the location to be described again
+        gameController.ProcessTurn(CommandOutcome.DESCRIBE);
     }
 
     // === STRUCTS ===

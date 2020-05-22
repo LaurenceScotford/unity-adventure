@@ -47,9 +47,9 @@ public class LocationController : MonoBehaviour
         }
     }
 
-    public int TimesToAbbreviateLocation { get ; set; } // The number of times a short location description should be shown before the long description is shown again
-    public int DetailMsgCount { get; set; }             // Keeps track of how many times player has been warned about not giving more detail
-    public Dictionary<string, int> LocViews { get; set; } = new Dictionary<string, int>();  // Keeps track of number of times each location is viewed (used to determine whether long or short description is shown
+    public int TimesToAbbreviateLocation { get ; private set; } // The number of times a short location description should be shown before the long description is shown again
+    public int DetailMsgCount { get; private set; }             // Keeps track of how many times player has been warned about not giving more detail
+    public Dictionary<string, int> LocViews { get; private set; } = new Dictionary<string, int>();  // Keeps track of number of times each location is viewed (used to determine whether long or short description is shown
 
 
 
@@ -240,6 +240,14 @@ public class LocationController : MonoBehaviour
         DetailMsgCount = 0;
         TimesToAbbreviateLocation = 5;
         LocViews.Clear();
+    }
+
+    // Restores Location Controller from saved game data
+    public void Restore(GameData gameData)
+    {
+        DetailMsgCount = gameData.detailMsgCount;
+        LocViews = gameData.locViews;
+        TimesToAbbreviateLocation = gameData.timesToAbbreviateLocation;
     }
 
     // Surpresses use of long descriptions except when player uses a LOOK command

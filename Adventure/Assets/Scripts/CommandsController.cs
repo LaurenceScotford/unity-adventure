@@ -28,11 +28,11 @@ public class CommandsController : MonoBehaviour
     // === PROPERTIES ===
 
     // The text for this magic word command gets randomised at the start of each new game - this property is used to access the generated text 
-    public string MagicWordText { get; set; }
+    public string MagicWordText { get; private set; }
 
     // Keeps track of item referenced in previous command
-    public string OldItem { get; set; }
-    public int WestCount { get; set; }  // Keeps trak of the number of times player has used the word "WEST" in full rather than "W"
+    public string OldItem { get; private set; }
+    public int WestCount { get; private set; }  // Keeps trak of the number of times player has used the word "WEST" in full rather than "W"
 
     // ==== MONOBEHAVIOR METHODS ===
 
@@ -149,6 +149,14 @@ public class CommandsController : MonoBehaviour
 
             MagicWordText += letter;
         }
+    }
+
+    // Restore Commands Controller from saved game data
+    public void Restore(GameData gameData)
+    {
+        MagicWordText = gameData.magicWordText;
+        OldItem = gameData.oldItem;
+        WestCount = gameData.westCount;
     }
 
     // ==== PRIVATE METHODS ===

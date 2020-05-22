@@ -9,6 +9,7 @@ using UnityEngine;
 public class PersistenceController : MonoBehaviour
 {
     // === MEMBER VARIABLES ===
+
     [SerializeField] private GameController gameController;
 
     private int lastSaveTurnCount;      // Number of turns that had elapsed when the last continuation save took place
@@ -30,45 +31,23 @@ public class PersistenceController : MonoBehaviour
         // If the required number of turns have taken place or the required time has passed (with at least one turn happening during that time), make a continuation save
         if (turnsThreshold || (timeThreshold && elapsedTurns >0))
         {
-            SaveGame(false);
+            SaveGame(null);
             ResetLastSave();
         }
     }
 
-    // Saves the game data, playerSave = true if it's a player initiated save and we need a filename, or false if its a continuation save
-    public bool SaveGame(bool playerSave)
+    // Creates the correct filepath for the current player and either a continuation save/load (filename is null) or player save/load
+    public string CreateFilePath(string filename)
     {
-        FileStream stream = null;
-        bool saveSuccess = true;
         int playerNum = PlayerPrefs.GetInt("CurrentPlayer");
-
-        try
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            string path = Path.Combine(Application.persistentDataPath, "Player" + playerNum + ".cont");
-            stream = new FileStream(path, FileMode.Create);
-
-            GameData data = new GameData(gameController);
-
-            formatter.Serialize(stream, data);
-        }
-        catch
-        {
-            saveSuccess = false;
-        } 
-        finally
-        {
-            stream.Close();
-        }
-
-        return saveSuccess;
+        string fullFileName = filename != null ? filename + ".p" + playerNum : "Player" + playerNum + ".cont";
+        return Path.Combine(Application.persistentDataPath, fullFileName);
     }
 
-    // Loads data into a GameData object and returns that object (or null if the loading was not successful), playerResume if it's a player initiated resume and we need a filename, or false if it's a continuation resume
-    public GameData LoadGame(bool playerResume)
+    // Loads data into a GameData object and returns that object (or null if the loading was not successful), if filename is null, its a continuation resume, if not it's a player save file resume
+    public GameData LoadGame(string filename)
     {
-        int playerNum = PlayerPrefs.GetInt("CurrentPlayer");
-        string path = Path.Combine(Application.persistentDataPath, "Player" + playerNum + ".cont");
+        string path = CreateFilePath(filename);
         GameData data = null;
         FileStream stream = null;
 
@@ -98,5 +77,37 @@ public class PersistenceController : MonoBehaviour
     {
         lastSaveTurnCount = gameController.Turns;
         lastSaveTimeStamp = DateTime.Now;
+    }
+
+    // Saves the game data, if filename is null, its a continuation save if not it's a player save 
+    public bool SaveGame(string filename)
+    {
+        FileStream stream = null;
+        bool saveSuccess = true;
+        string path = CreateFilePath(filename);
+
+        try
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            stream = new FileStream(path, FileMode.Create);
+
+            GameData data = new GameData(gameController);
+
+            formatter.Serialize(stream, data);
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e, this);
+            saveSuccess = false;
+        } 
+        finally
+        {
+            if (stream != null)
+            {
+                stream.Close();
+            }
+        }
+
+        return saveSuccess;
     }
 }

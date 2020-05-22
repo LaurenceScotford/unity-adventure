@@ -1,6 +1,7 @@
 ﻿// Dwarf
 // Represents a single dwarf
 
+[System.Serializable]
 public class Dwarf
 {
     // === PROPERTIES ===

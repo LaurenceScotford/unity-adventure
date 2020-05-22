@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: 266Resume
   m_EditorClassIdentifier: 
   messageID: 266Resume
-  message: To resume your Adventure, start a new game and then say "RESUME".
+  message: Your progress has been saved. You can now continue playing or return to
+    the menu if you're done. To resume using a saved game in future, select LOAD
+    from the menu or use the "RESUME" command while in a game.

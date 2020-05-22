@@ -50,11 +50,11 @@ public class ScoreController : MonoBehaviour
 
     
     public bool ClosedHintShown { get; set; }   // Keeps track of whether the closed hint on the oyster was shown
-    public bool IsNovice { get; set; }
-    public int BonusPoints { get; set; }        // Keeps track of bonus points added
-    public int SavePenaltyPoints { get; set; }  // keeps track of points spent on saving game
-    public int ThresholdIndex { get; set; }     // Index of next turn threshold
-    public int TurnsPointsLost { get; set; }    // Keeps track of points lost for using too many turns
+    public bool IsNovice { get; set; }          // keeps track of whether player is a novice (they asked for instructions)
+    public int BonusPoints { get; private set; }        // Keeps track of bonus points added
+    public int SavePenaltyPoints { get; private set; }  // keeps track of points spent on saving game
+    public int ThresholdIndex { get; private set; }     // Index of next turn threshold
+    public int TurnsPointsLost { get; private set; }    // Keeps track of points lost for using too many turns
     public bool ReachedEnd { get; set; }        // Whether the player reached the end of the game
 
     // === PUBLIC METHODS ===
@@ -69,6 +69,25 @@ public class ScoreController : MonoBehaviour
     public void AddSavePenalty()
     {
         SavePenaltyPoints += 5;
+    }
+
+    // Calculates and returns the current score and max score in a two element array
+    public int[] CalculateScore(ScoreMode scoreMode)
+    {
+        mode = scoreMode;
+
+        // Initialise counts
+        score = 0;
+        maxScore = 0;
+
+        // Now add the scores for treasures and progress
+        TreasureScore();
+        ProgressScore();
+
+        // Deduct any penalties for saving, using hints or taking too many turns
+        DeductPenalties();
+
+        return new int[] { score, maxScore };
     }
 
     // Checks if player has passed a number of turns threshold, and shows message and deducts points if so
@@ -86,18 +105,7 @@ public class ScoreController : MonoBehaviour
     // Calculates and displays the player's current score. isFinal should be true if this is a final score
     public void DisplayScore(ScoreMode scoreMode)
     {
-        mode = scoreMode; 
-
-        // Initialise counts
-        score = 0;
-        maxScore = 0;
-
-        // Now add the scores for treasures and progress
-        TreasureScore();
-        ProgressScore();
-        
-        // Deduct any penalties for saving, using hints or taking too many turns
-        DeductPenalties();
+        CalculateScore(scoreMode);
 
         string scoreMsg;
         string[] ScoreMsgParams = new string[] { score.ToString(), maxScore.ToString(), gameController.Turns.ToString(), gameController.Turns != 1 ? "s" : "" };
@@ -167,6 +175,18 @@ public class ScoreController : MonoBehaviour
         SavePenaltyPoints = 0;
         ClosedHintShown = false;
         IsNovice = false;
+    }
+
+    // Restore Score Controller from saved game data
+    public void Restore(GameData gameData)
+    {
+        BonusPoints = gameData.bonusPoints;
+        ClosedHintShown = gameData.closedHintShown;
+        SavePenaltyPoints = gameData.savePenaltyPoints;
+        ThresholdIndex = gameData.thresholdIndex;
+        TurnsPointsLost = gameData.turnsPointsLost;
+        IsNovice = gameData.isNovice;
+        ReachedEnd = gameData.reachedEnd;
     }
 
     // === PRIVATE METHODS ===

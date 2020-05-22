@@ -22,9 +22,9 @@ public class HintController : MonoBehaviour
 
     private int currentHint;                                     // Keepos track of hint being checked
     private string locationToCheck;                              // Keeps track of location currently being checked
-    public Dictionary<string, HintActivation> hintActivations;   // Tracks the hint activation and count for each hint
 
     // === PROPERTIES ===
+    public Dictionary<string, HintActivation> HintActivations { get; private set; }   // Tracks the hint activation and count for each hint
 
     public int PointsDeductedForHints
     {
@@ -34,13 +34,24 @@ public class HintController : MonoBehaviour
 
             foreach (Hint hint in hints)
             {
-                if (hintActivations[hint.HintID].hintActivated)
+                if (HintActivations[hint.HintID].hintActivated)
                 {
                     pointsDeducted += hint.PointsCost;
                 }
             }
 
             return pointsDeducted;
+        }
+    }
+
+    // === MONOBEHAVIOUR METHODS ===
+    private void Start()
+    {
+        // Add questions used by this controller
+        for (int i = 0; i < hints.Length; i++)
+        {
+            questionController.AddQuestion("hint" + i, new Question(hints[i].QuestionID, null, "54OK", false, HintQuestionYesResponse, null));
+            questionController.AddQuestion("hintConfirm" + i, new Question("175WantHint", hints[i].HintMessageID, "54OK", false, HintWantedResponse, null));
         }
     }
 
@@ -57,16 +68,16 @@ public class HintController : MonoBehaviour
             string hintID = hints[i].HintID;
 
             // If the hint has not already been activated...
-            if (!hintActivations[hintID].hintActivated)
+            if (!HintActivations[hintID].hintActivated)
             {
                 // Check if this location is eligible for a hint on this turn
                 if (hints[i].Locations.Contains(locationID))
                 {
-                    hintActivations[hintID].hintCounter++;
+                    HintActivations[hintID].hintCounter++;
 
-                    if (hintActivations[hintID].hintCounter >= hints[i].TurnsTillActivation)
+                    if (HintActivations[hintID].hintCounter >= hints[i].TurnsTillActivation)
                     {
-                        hintActivations[hintID].hintCounter = 0;
+                        HintActivations[hintID].hintCounter = 0;
 
                         if (QuickChecks(hintID))
                         {
@@ -77,7 +88,7 @@ public class HintController : MonoBehaviour
                 }
                 else
                 {
-                    hintActivations[hintID].hintCounter = 0;
+                    HintActivations[hintID].hintCounter = 0;
                 }
             }
         }
@@ -86,7 +97,7 @@ public class HintController : MonoBehaviour
         if (currentHint >= 0)
         {
             // ... ask the hint question
-            questionController.RequestQuestionResponse(hints[currentHint].QuestionID, null, "54OK", HintQuestionYesResponse, null);
+            questionController.RequestQuestionResponse("hint" + currentHint);
             return true;
         }
 
@@ -101,13 +112,13 @@ public class HintController : MonoBehaviour
         string pointsMsg = playerMessageController.GetMessage("261HintCost", new string[] { points.ToString(), points != 1 ? "s" : "" });
         textDisplayController.AddTextToLog(pointsMsg);
 
-        questionController.RequestQuestionResponse("175WantHint", hints[currentHint].HintMessageID, "54OK", HintWantedResponse, null);
+        questionController.RequestQuestionResponse("hintConfirm" + currentHint);
     }
 
     // Callback if player answers positively to the hint confirmation question
     public void HintWantedResponse()
     {
-        hintActivations[hints[currentHint].HintID].hintActivated = true;
+        HintActivations[hints[currentHint].HintID].hintActivated = true;
 
         // If the lamp is not already dimming, extend the lamp life based on the cost of the hint
         if (gameController.LampLife > 30)
@@ -165,16 +176,23 @@ public class HintController : MonoBehaviour
 
     public void ResetHints()
     {
-        hintActivations = new Dictionary<string, HintActivation>();
+        HintActivations = new Dictionary<string, HintActivation>();
 
         foreach (Hint hint in hints)
         {
-            hintActivations.Add(hint.HintID, new HintActivation());
+            HintActivations.Add(hint.HintID, new HintActivation());
         }
+    }
+
+    // Restore Hint Controller from saved game data
+    public void Restore(GameData gameData)
+    {
+        HintActivations = gameData.hintActivations;
     }
 }
 
 // Used for keeping track of hint activations
+[System.Serializable]
 public class HintActivation
 {
     public bool hintActivated;

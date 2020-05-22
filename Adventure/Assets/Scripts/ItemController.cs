@@ -35,8 +35,8 @@ public class ItemController : MonoBehaviour
 
     public int MaxTreasures { get; private set; }   // Holds the number of treasures in the game
     public int MaxTreasurePoints { get; private set; }  // Holds the maximum points attainable by leaving treasures in the building
-    public List<string> TreasuresSeen { get; set; } = new List<string>();   // Keeps track of treasures found by player
-    public Dictionary<string, ItemRuntime> ItemDict { get; set; }   // A dictionary holding the curren states of each item
+    public List<string> TreasuresSeen { get; private set; } = new List<string>();   // Keeps track of treasures found by player
+    public Dictionary<string, ItemRuntime> ItemDict { get; private set; }   // A dictionary holding the curren states of each item
 
     // === MONOBEHAVIOUR METHODS ===
 
@@ -415,6 +415,13 @@ public class ItemController : MonoBehaviour
         // Adjust initial item state for rug and chain
         ItemDict["62Rug"].ItemState = 1;
         ItemDict["64Chain"].ItemState = 1;
+    }
+
+    // Restore Item Controller from saved game data
+    public void Restore(GameData gameData)
+    {
+        ItemDict = gameData.itemDict;
+        TreasuresSeen = gameData.treasuresSeen;
     }
 
     // Sets the state for the given item

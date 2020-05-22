@@ -37,6 +37,9 @@ public class Read : Action
         // Define behaviour for getting a subject
         carryOverVerb = true;
         subjectOptional = false;
+
+        // Create question used by this action
+        questionController.AddQuestion("read", new Question("192Clue", "193ReadClue", "54OK", false, OysterYes, null));
     }
 
     // === PUBLIC METHODS ===
@@ -76,7 +79,7 @@ public class Read : Action
                 else
                 {
                     // Oyster is a special case when read after cave closed before hint has been revealed
-                    questionController.RequestQuestionResponse("192Clue", "193ReadClue", "54OK", OysterYes, null);
+                    questionController.RequestQuestionResponse("read");
                     outcome = CommandOutcome.QUESTION;
                 }
             }

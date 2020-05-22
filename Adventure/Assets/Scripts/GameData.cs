@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 [Serializable]
 public class GameData
@@ -17,11 +18,15 @@ public class GameData
     public int clock2;
     public CommandToProcess[] commandsToProcess;
     public string currentLocation;
+    public string currentQuestion;
     public int detailMsgCount;
     public Dwarf[] dwarves;
     public int dwarvesKilled;
     public int foobar;
+    public int goCount;
     public Dictionary<string, HintActivation> hintActivations;
+    public bool inQuestion;
+    public bool isNovice;
     public Dictionary<string, ItemRuntime> itemDict;
     public int lampLife;
     public bool lampWarning;
@@ -31,6 +36,7 @@ public class GameData
     public string oldItem;
     public string[] oldLocations;
     public bool panic;
+    public bool reachedEnd;
     public int savePenaltyPoints;
     public string subjectCarriedOver;
     public List <string> textLog;
@@ -46,12 +52,12 @@ public class GameData
     public GameData(GameController controller)
     {
         // Add text display data
-        textLog = controller.textDisplayController.textLog;
+        textLog = controller.textDisplayController.TextLog;
 
         // Add parser state
         ParserState parserState = controller.parserState;
         commandBeingProcessed = parserState.CommandBeingProcessed;
-        commandsToProcess = parserState.commandsToProcess;
+        commandsToProcess = parserState.CommandsToProcess;
         subjectCarriedOver = parserState.SubjectCarriedOver;
         verbCarriedOver = parserState.VerbCarriedOver;
 
@@ -92,6 +98,7 @@ public class GameData
         // Add actions data
         ActionController actionController = controller.actionController;
         foobar = actionController.Foobar;
+        goCount = actionController.GoCount;
 
         // Add dwarf data
         DwarfController dwarfController = controller.dwarfController;
@@ -106,8 +113,13 @@ public class GameData
         savePenaltyPoints = scoreController.SavePenaltyPoints;
         thresholdIndex = scoreController.ThresholdIndex;
         turnsPointsLost = scoreController.TurnsPointsLost;
+        isNovice = scoreController.IsNovice;
+        reachedEnd = scoreController.ReachedEnd;
 
         // Add hints data
-        hintActivations = controller.hintController.hintActivations;
+        hintActivations = controller.hintController.HintActivations;
+
+        // Add question data
+        currentQuestion = controller.questionController.CurrentQuestion;
     }
 }

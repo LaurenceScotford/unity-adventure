@@ -1,6 +1,9 @@
 ﻿// Save
 // Executes SAVE command
 
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
 public class Save : Action
 {
     // === MEMBER VARIABLES ===
@@ -29,6 +32,9 @@ public class Save : Action
 
         // Define behaviour for getting a subject
         subjectOptional = true;
+
+        // Add question used by this action
+        questionController.AddQuestion("save", new Question("200Acceptable", "54OK", "54OK", false, YesSave, NoDontSave));
     }
 
     // === PUBLIC METHODS ===
@@ -44,7 +50,7 @@ public class Save : Action
 
         textDisplayController.AddTextToLog(playerMessageController.GetMessage("260Suspend"));
         parserState.CommandComplete();
-        questionController.RequestQuestionResponse("200Acceptable", "54OK", "54OK", YesSave, NoDontSave);
+        questionController.RequestQuestionResponse("save");
         return CommandOutcome.QUESTION;
     }
 
@@ -54,12 +60,15 @@ public class Save : Action
         return null;
     }
 
-    // === Handler for the yes reponse to save question ===
+    // Handler for the yes reponse to save question - Makes a continuation save first, so player can continue current game after the save completes
     public void YesSave()
     {
-        scoreController.AddSavePenalty();
-
-        
+        if (gameController.ContinuationSave())
+        {
+            PlayerPrefs.SetString("OriginatingScene", "Game");
+            PlayerPrefs.SetString("LoadSaveMode", "save");
+            SceneManager.LoadScene("LoadSaveGame");
+        }
     }
 
     // === Handler for the no response to save question ===

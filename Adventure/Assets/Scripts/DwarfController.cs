@@ -45,13 +45,13 @@ public class DwarfController : MonoBehaviour
     // === PROPERTIES ===
 
     // Keeps track of current activation level
-    public int ActivationLevel { get; set; }
+    public int ActivationLevel { get; private set; }
 
     // Return number of dwarves killed by player
-    public int DwarvesKilled { get; set; }
+    public int DwarvesKilled { get; private set; }
 
     // Array holding the dwarves
-    public Dwarf[] Dwarves { get; set; }
+    public Dwarf[] Dwarves { get; private set; }
 
     // === MONOBEHAVIOUR METHODS ===
 
@@ -153,7 +153,7 @@ public class DwarfController : MonoBehaviour
 
         // Temp debug code
         string dwarfText = "Dwarf Activation Level: " + ActivationLevel + "\n";
-        dwarfText += "Treasure Chest in play: " + itemController.ItemInPlay("55Chest");
+        dwarfText += "Treasure Chest in play: " + itemController.ItemInPlay("55Chest") + "\n";
 
         for (int i = 0; i < Dwarves.Length; i++)
         {
@@ -233,6 +233,14 @@ public class DwarfController : MonoBehaviour
         // Set the knife to be non-existant
         knifeMessageShown = false;
         itemController.DestroyItem(KNIFE);
+    }
+
+    // Restore Dwarf Controller from saved game data
+    public void Restore(GameData gameData)
+    {
+        ActivationLevel = gameData.activationLevel;
+        Dwarves = gameData.dwarves;
+        DwarvesKilled = gameData.dwarvesKilled;
     }
 
     // === PRIVATE METHODS ===

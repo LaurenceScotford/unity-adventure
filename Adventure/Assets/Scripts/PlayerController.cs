@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
 
     // === PROPERTIES ===
 
-    public string CurrentLocation { get; set; } // The current location of the player avatar
+    public string CurrentLocation { get; private set; } // The current location of the player avatar
     public string[] OldLocations { get; private set; }
 
     // Returns a string with a list of items carried by the player avatar
@@ -250,6 +250,14 @@ public class PlayerController : MonoBehaviour
         OldLocations = new string[2];
         CurrentLocation = startLocation;
         PotentialLocation = startLocation;
+    }
+
+    // Restore player controller from Save Game data 
+    public void Restore(GameData gameData)
+    {
+        CurrentLocation = gameData.currentLocation;
+        OldLocations = gameData.oldLocations;
+        PotentialLocation = CurrentLocation;
     }
 
     //  Tries to move the player back to previous location and if possible, sets potential location to the new location. Returns the outcome of the movement

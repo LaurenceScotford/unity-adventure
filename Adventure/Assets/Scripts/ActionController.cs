@@ -25,7 +25,7 @@ public class ActionController : MonoBehaviour
     // A dictionary mapping verbs to the class that handles them
     private Dictionary<string, Action> actions; 
 
-    private int goCount;    // Used to keep track of number of times player uses "GO"
+    
 
     // === PROPERTIES ===
 
@@ -42,12 +42,12 @@ public class ActionController : MonoBehaviour
     public QuestionController QC { get { return questionController; } }
     public ScoreController SC { get { return scoreController; } }
 
-    public int Foobar { get; set; }     // Used to track the FEE FIE FOE sequence
-
+    public int Foobar { get; private set; }     // Used to track the FEE FIE FOE sequence
+    public int GoCount { get; private set; }    // Used to keep track of number of times player uses "GO"
 
     // === MONOBEHAVIOUR METHODS ===
 
-    private void Awake()
+    private void Start()
     {
         actions  = new Dictionary<string, Action>()
         {
@@ -157,7 +157,7 @@ public class ActionController : MonoBehaviour
     // Increments Go Count and returns the new count
     public int IncrementGoCount()
     {
-        return ++goCount;
+        return ++GoCount;
     }
 
     // Resets index tracking FEE FIE FOE sequence
@@ -170,7 +170,14 @@ public class ActionController : MonoBehaviour
     public void ResetTrackers()
     {
         ResetFoobar();
-        goCount = 0;
+        GoCount = 0;
+    }
+
+    // Restore Action Controller from saved game data
+    public void Restore(GameData gameData)
+    {
+        Foobar = gameData.foobar;
+        GoCount = gameData.goCount;
     }
 }
 

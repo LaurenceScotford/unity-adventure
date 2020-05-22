@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d33f91a3aba60e043bc80847f3f26f54
+guid: a68bb73aff8b7e14c8dc0d9e92687c94
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -11,6 +11,9 @@ TextureImporter:
   - first:
       213: 8467241744927558709
     second: Button_2
+  - first:
+      213: 1566552715412073297
+    second: Button_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -100,7 +103,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 72
+        y: 108
         width: 192
         height: 36
       alignment: 0
@@ -121,7 +124,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 36
+        y: 72
         width: 192
         height: 36
       alignment: 0
@@ -142,7 +145,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 36
         width: 192
         height: 36
       alignment: 0
@@ -154,6 +157,27 @@ TextureImporter:
       bones: []
       spriteID: 53c04c1718fa18570800000000000000
       internalID: 8467241744927558709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 192
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 2, y: 2, z: 2, w: 2}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15b6f0c05638db510800000000000000
+      internalID: 1566552715412073297
       vertices: []
       indices: 
       edges: []

@@ -15,22 +15,47 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private GameObject lowerDebugPanel;
     [SerializeField] private TextDisplayController textDisplayController;
 
+    private Text placeholder;   // Reference to placeholder text
+
     // Delegate to hold call back when a new command is entered
     public delegate void OnCommandsEntered();
     public static OnCommandsEntered commandsEntered;
 
-   // === PROPERTIES ===
+    // === PROPERTIES ===
 
     public int NumberOfWords { get; private set; }
     public CommandWord[] Words { get; } = new CommandWord[2];
+    public string Placeholder 
+    {
+        set 
+        {
+            placeholder.text = value;
+        }
+    }
 
     // === MONOBEHAVIOUR METHODS ===
+    private void Awake()
+    {
+        // Get reference to placeholder
+        placeholder = inputField.placeholder.GetComponent<Text>();
+    }
 
     private void Start()
     {
         // Set up for accepting player commands
         inputField.onEndEdit.AddListener(ProcessInput);
         inputField.ActivateInputField();
+    }
+
+    // === PUBLIC METHODS ===
+    public void DisableInput()
+    {
+        inputField.interactable = false;
+    }
+
+    public void EnableInput()
+    {
+        inputField.interactable = true;
     }
 
     // === PRIVATE METHODS ===

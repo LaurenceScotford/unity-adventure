@@ -2,8 +2,10 @@
 // The master controller that is the entry point for a new game and controls the game sequence
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -13,6 +15,9 @@ public class GameController : MonoBehaviour
     public bool debugMode = false;  
     [SerializeField] private GameObject debugPanel;
     [SerializeField] private DebugPanel debugPanelScript;
+    [SerializeField] private GameObject warningDialogue;
+    [SerializeField] private Text warningText;
+    [SerializeField] private Button menuButton;
 
     // References to other parts of the game engine
     [SerializeField] private PlayerInput playerInput;             
@@ -25,13 +30,17 @@ public class GameController : MonoBehaviour
     public LocationController locationController;
     public ParserState parserState;
     public HintController hintController;
-    [SerializeField] private QuestionController questionController;
+    public QuestionController questionController;
     public ScoreController scoreController;
     public DwarfController dwarfController;
     [SerializeField] private PersistenceController persistenceController;
 
     // Hold questions and messages to be used during reincarnation sequence
-    [SerializeField] private ReincarnationText[] reincarnationTexts;                                                                                     
+    [SerializeField] private ReincarnationText[] reincarnationTexts;
+
+    private SaveLoadType warningType;   // Set to the appropriate warning type when the save / load warning dialogue is in use
+
+    private bool gameStarted;   // Flag indicating if the game has started
 
     // Constant values
    
@@ -44,42 +53,97 @@ public class GameController : MonoBehaviour
 
     // === PROPERTIES ===
 
-    public bool WasDark { get; set; }                                   // Keeps track of whether the player is moving from a dark location
-    public CaveStatus CurrentCaveStatus { get; set; }                   // Whether the cave is currently open, closing or closed
+    public bool WasDark { get; private set; }                           // Keeps track of whether the player is moving from a dark location
+    public CaveStatus CurrentCaveStatus { get; private set; }           // Whether the cave is currently open, closing or closed
     public int LampLife { get; set; }                                   // Keeps track of remaining lamp life                
-    public int NumDeaths { get; set; }                                  // Keeps track of number of times player avatar has died
+    public int NumDeaths { get; private set; }                          // Keeps track of number of times player avatar has died
     public int MaxDeaths { get { return reincarnationTexts.Length; } }  // Maximum times player avatar can die
     public int Turns { get ; set; }                                     // Number of turns taken
-    public int Clock1 { get; set; }                                     // Countdown number of turns to closing after finding last treasure
-    public int Clock2 { get; set; }                                     // Countdowns number of turns from first warning to blnding flash
-    public bool LampWarning { get; set; }                               // Whether the player has been warned about the lamp dimmiong
-    public bool Panic { get; set; }                                     // Set to true when player finds out they are locked in
-    public GameStatus CurrentGameStatus { get; set; }                   // Whether the game is currently playing or is over
+    public int Clock1 { get; private set; }                             // Countdown number of turns to closing after finding last treasure
+    public int Clock2 { get; private set; }                             // Countdowns number of turns from first warning to blnding flash
+    public bool LampWarning { get; private set; }                       // Whether the player has been warned about the lamp dimmiong
+    public bool Panic { get; private set; }                             // Set to true when player finds out they are locked in
+    public GameStatus CurrentGameStatus { get; private set; }           // Whether the game is currently playing or is over
 
     // ========= MONOBEHAVIOUR METHODS =========
 
-    // Sets up the debug panel, if needed, initialises a new game and offers the player the choice of seeing the instructions or not
     private void Start()
     {
-        // Start the game in the selected mode
-        switch (PlayerPrefs.GetString("CurrentMode"))
-        {
-            case "new":
-                // Set up parameters for a new game
-                NewGame();
+        gameStarted = false;
 
-                // Clear text view and show welcome message and instructions question
-                textDisplayController.ResetTextDisplay();
-                questionController.RequestQuestionResponse("65Welcome", "1Instructions", null, InstructionsResponseYes, InstructionsResponseNo);
-                break;
-            case "continue":
-                break;
-            case "load":
-                break;
+        // Set up questions used by this controller
+        questionController.AddQuestion("instructions", new Question("65Welcome", "1Instructions", null, false, InstructionsResponseYes, InstructionsResponseNo));
+
+        for (int i = 0; i < reincarnationTexts.Length; i++)
+        {
+            questionController.AddQuestion("reincarnation" + (i + 1), new Question(reincarnationTexts[i].questionMessageID, reincarnationTexts[i].responseMessageID, "54OK", false, ReincarnatePlayer, NoReincarnation));
+        }
+    }
+
+    // Sets up the debug panel, if needed, initialises a new game and offers the player the choice of seeing the instructions or not
+    private void Update()
+    {
+        if (!gameStarted)
+        {
+            gameStarted = true;
+
+            // Start the game in the selected mode
+            switch (PlayerPrefs.GetString("CurrentMode"))
+            {
+                case "new":
+                    // Set up parameters for a new game
+                    NewGame();
+
+                    // Clear text view and show welcome message and instructions question
+                    textDisplayController.ResetTextDisplay();
+                    questionController.RequestQuestionResponse("instructions");
+                    break;
+                case "continue":
+                    ResumeFromLoad(true);
+                    break;
+                case "load":
+                    ResumeFromLoad(false);
+                    break;
+                case "save":
+                    SaveGame();
+                    break;
+            }
         }
     }
 
     // ========= PUBLIC METHODS =========
+
+    // Attempts a continuation save and warns player if it isn't successful - returns true if successful, false otherwise
+    public bool ContinuationSave()
+    {
+        if (!persistenceController.SaveGame(null))
+        {
+            warningType = SaveLoadType.CONTINUATION_SAVE;
+            OpenWarningDialogue();
+            return false;
+        }
+        else
+        {
+            // Prepare a string for player prefs describing the continuation status for the current player
+            string gameStatus;
+            ScoreMode scoreMode;
+
+            if (CurrentGameStatus == GameStatus.PLAYING)
+            {
+                gameStatus = "Game in progress (Current score: ";
+                scoreMode = ScoreMode.INTERIM;
+            }
+            else
+            {
+                gameStatus = "Game ended (Final score: ";
+                scoreMode = ScoreMode.FINAL;
+            }
+
+            int[] score = scoreController.CalculateScore(scoreMode);
+            PlayerPrefs.SetString("Player" + PlayerPrefs.GetInt("CurrentPlayer") + "Status", gameStatus + score[0] + " of a possible " + score[1] + " in " + Turns + " turn" + (Turns != 1 ? "s)" : ")"));
+            return true;
+        }
+    }
 
     // Brings the game to a close isQuitting is set to true if player has quit and false if game has come to a natural end
     public void EndGame(bool isQuitting)
@@ -197,7 +261,7 @@ public class GameController : MonoBehaviour
         EndGame(false);
     }
 
-    // Monitors for a RESUME command and shows a message for any other command (this is the standard processer used acfter the game is over)
+     // Monitors for a RESUME command and shows a message for any other command (this is the standard processer used acfter the game is over)
     public void PostGameCommand()
     {
         SuspendCommandProcessing();
@@ -357,16 +421,11 @@ public class GameController : MonoBehaviour
         }
     }
 
-    // Returns to menu (saves the Continue state first)
-    public void ReturnToMenu()
-    {
-        persistenceController.SaveGame(false);
-        SceneManager.LoadScene("Menu");
-    }
-
     // Resume interpreting input from the player as commands
     public void ResumeCommandProcessing()
     {
+        playerInput.Placeholder = "Enter a one or two word command ...";
+
         if (CurrentGameStatus == GameStatus.PLAYING)
         {
             PlayerInput.commandsEntered = GetPlayerCommand;
@@ -374,6 +433,17 @@ public class GameController : MonoBehaviour
         else
         {
             PlayerInput.commandsEntered =  PostGameCommand;
+        }
+    }
+
+    // Returns to menu (saves the Continue state first)
+    public void ReturnToMenu()
+    {
+        if (ContinuationSave())
+        {
+            PlayerPrefs.DeleteKey("CurrentMode");
+            PlayerPrefs.DeleteKey("CurrentPlayer");
+            SceneManager.LoadScene("Menu");
         }
     }
 
@@ -449,6 +519,47 @@ public class GameController : MonoBehaviour
         PlayerInput.commandsEntered = null;
     }
 
+
+    // Handler for the CANCEL button on the warning dialogue
+    public void WarningDialogueCancel()
+    {
+        SaveLoadType wType = warningType;
+        warningType = SaveLoadType.NO_WARNING;
+        CloseWarningDialogue();
+
+        if (wType == SaveLoadType.CONTINUATION_LOAD || wType == SaveLoadType.PLAYER_LOAD)
+        {
+            SceneManager.LoadScene("Menu");
+        }
+    }
+
+    // Handler for the RETRY button on the warning dialogue
+    public void WarningDialogueRetry()
+    {
+        CloseWarningDialogue();
+        SaveLoadType wType = warningType;
+        warningType = SaveLoadType.NO_WARNING;
+
+        switch (wType)
+        {
+            case SaveLoadType.CONTINUATION_LOAD:
+                ResumeFromLoad(true);
+                break;
+            case SaveLoadType.CONTINUATION_SAVE:
+                ContinuationSave();
+                break;
+            case SaveLoadType.PLAYER_LOAD:
+                ResumeFromLoad(false);
+                break;
+            case SaveLoadType.PLAYER_SAVE:
+                SaveGame();
+                break;
+            default:
+                break;
+        }
+    }
+
+
     // ========= PRIVATE METHODS =========
    
     // If debug mode is on, activate the debug panel
@@ -496,6 +607,14 @@ public class GameController : MonoBehaviour
                 }
             }
         }
+    }
+
+    // Closes the warning dialogue and enables interaction with normal game controls
+    private void CloseWarningDialogue()
+    {
+        warningDialogue.SetActive(false);
+        playerInput.EnableInput();
+        menuButton.interactable = true;
     }
 
     // Display items at current location
@@ -550,6 +669,23 @@ public class GameController : MonoBehaviour
         }
     }
 
+    // Attempts to load a game and warns player if it isn't successful
+    private GameData LoadGame(bool isContinuation)
+    {
+        GameData gameData = persistenceController.LoadGame(isContinuation ? null : PlayerPrefs.GetString("CurrentFile"));
+
+        if (gameData == null)
+        {
+            warningType = isContinuation ? SaveLoadType.CONTINUATION_LOAD : SaveLoadType.PLAYER_LOAD;
+            OpenWarningDialogue();
+            return null;
+        }
+        else
+        {
+            return gameData;
+        }
+    }
+
     // Set up parameters for a new game
     private void NewGame()
     {
@@ -591,6 +727,35 @@ public class GameController : MonoBehaviour
         persistenceController.ResetLastSave();
     }
 
+    // Opens the warning dialogue and disables interaction with normal game controls
+    private void OpenWarningDialogue()
+    {
+
+        string warningTextContent = null;
+
+        switch (warningType)
+        {
+            case SaveLoadType.CONTINUATION_LOAD:
+                warningTextContent = "An error has occurred while trying to continue your game. You can TRY AGAIN or CANCEL to return to the menu.";
+                break;
+            case SaveLoadType.CONTINUATION_SAVE:
+                warningTextContent = "An error has occurred while trying to save your game progress. You can TRY AGAIN or CANCEL to return to the game (but your progress may be lost when you close the game).";
+                break;
+            case SaveLoadType.PLAYER_LOAD:
+                warningTextContent = "An error has occurred while trying to load your game. You can TRY AGAIN or CANCEL to return to the menu.";
+                break;
+            case SaveLoadType.PLAYER_SAVE:
+                warningTextContent = "An error has occurred while trying to save your game. You can TRY AGAIN or CANCEL to return to the game without saving.";
+                break;
+        }
+
+        warningText.text = warningTextContent;
+
+        menuButton.interactable = false;
+        playerInput.DisableInput();
+        warningDialogue.SetActive(true);
+    }
+
     // Player has died, offer reincarnation or wrap things up
     private void PlayerDeath()
     {
@@ -606,8 +771,122 @@ public class GameController : MonoBehaviour
         else
         {
             // Otherwise, ask the reincarnation question
-            questionController.RequestQuestionResponse(reincarnationTexts[NumDeaths - 1].questionMessageID, reincarnationTexts[NumDeaths - 1].responseMessageID, "54OK", ReincarnatePlayer, NoReincarnation);
+            questionController.RequestQuestionResponse("reincarnation" + NumDeaths);
         }
+    }
+
+    // Restart a game that has been loaded from a continuation or player save
+    private void RestartGame(GameData gameData)
+    {
+        ActivateDebugPanel();
+
+        // If the game was saved while a question was active, restore the question, otherwise wait for a normal player command
+        if (gameData.currentQuestion != null)
+        {
+            questionController.Restore(gameData);
+        }
+        else
+        {
+            ResumeCommandProcessing();
+        }
+    }
+
+    // Load an resume a game
+    private void ResumeFromLoad(bool isContinuation)
+    {
+        GameData gameData = LoadGame(isContinuation);
+        if (gameData != null)
+        {
+            TidyLoadSavePrefs();
+            ResumeGame(gameData);
+            RestartGame(gameData);
+        } 
+        else
+        {
+            warningType = isContinuation ? SaveLoadType.CONTINUATION_LOAD : SaveLoadType.PLAYER_LOAD;
+            OpenWarningDialogue();
+        }
+    }
+
+    // Resumes a game from saved game data
+    public void ResumeGame(GameData gameData)
+    {
+        // Restore text display data
+        textDisplayController.Restore(gameData);
+
+        // Restore parser state
+        parserState.Restore(gameData);
+
+        // Restore player data
+        playerController.Restore(gameData);
+
+        // Restore commands data
+        commandsController.Restore(gameData);
+
+        // Restore location data
+        locationController.Restore(gameData);
+
+        // Restore items data
+        itemController.Restore(gameData);
+
+        // Restore actions data
+        actionController.Restore(gameData);
+
+        // Restore dwarf data
+        dwarfController.Restore(gameData);
+
+        // Restore score data
+        scoreController.Restore(gameData);
+
+        // Restore hints data
+        hintController.Restore(gameData);
+
+        // Restore game controller data
+        Clock1 = gameData.clock1;
+        Clock2 = gameData.clock2;
+        CurrentCaveStatus = gameData.currentCaveStatus;
+        CurrentGameStatus = gameData.currentGameStatus;
+        LampLife = gameData.lampLife;
+        LampWarning = gameData.lampWarning;
+        NumDeaths = gameData.numDeaths;
+        Panic = gameData.panic;
+        Turns = gameData.turns;
+        WasDark = gameData.wasDark;
+    }
+ 
+    // Attempts to save the current game (if successful, applies the save penalty then returns to the game)
+    private void SaveGame()
+    {
+        // First restore the continuation save
+        GameData gameData = LoadGame(true);
+        if (gameData != null)
+        {
+            ResumeGame(gameData);
+
+            // Add the penalty for saving before saving the current game
+            scoreController.AddSavePenalty();
+
+            // Attempt to save the current game
+            if (persistenceController.SaveGame(PlayerPrefs.GetString("CurrentFile")))
+            {
+                // Save has worked, so remove prefs no longer needed, confirm save to player and then restart game
+                TidyLoadSavePrefs();
+                textDisplayController.AddTextToLog(playerMessageController.GetMessage("266Resume"));
+                RestartGame(gameData);
+                return;
+            }
+        }
+
+        // Save has failed, so show warning dialogue
+        warningType = SaveLoadType.PLAYER_SAVE;
+        OpenWarningDialogue();
+    }
+
+    // Tidies up player prefs used during loading or saving of games
+    private void TidyLoadSavePrefs()
+    {
+        PlayerPrefs.DeleteKey("CurrentFile");
+        PlayerPrefs.DeleteKey("OriginatingScene");
     }
 
     // Update the clocks and check for closing/blinding flash
@@ -712,6 +991,7 @@ public enum CaveStatus { OPEN, CLOSING, CLOSED };
 // Game status shows whether the game is currently playing or is over
 public enum GameStatus { PLAYING, OVER };
 
-
+// Shows the type of save / load operation being attempted
+public enum SaveLoadType { NO_WARNING, CONTINUATION_LOAD, CONTINUATION_SAVE, PLAYER_LOAD, PLAYER_SAVE }
 
 

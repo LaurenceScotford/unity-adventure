@@ -13,5 +13,8 @@ MonoBehaviour:
   m_Name: 260Suspend
   m_EditorClassIdentifier: 
   messageID: 260Suspend
-  message: "I can suspend your Adventure for you so that you can resume later, but\r
-    it will cost you 5 points.\r"
+  message: "If you want to save your game so you can stop playing for now and come
+    back to it later, simply return to the menu and I will automatically save your
+    progress. If, however, you want to create a saved file at this specific point
+    in the game that you can restore later, e.g. if things don't go as you hoped,
+    I can do that for you, but\r it will cost you 5 points.\r"

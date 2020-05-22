@@ -20,6 +20,9 @@ public class Quit : Action
         parserState = controller.PS;
         gameController = controller.GC;
         questionController = controller.QC;
+
+        // Add question used by this action
+        questionController.AddQuestion("quit", new Question("22QuitQuestion", "54OK", "54OK", false, YesQuit, NoDontQuit));
     }
 
     public override CommandOutcome DoAction()
@@ -33,7 +36,7 @@ public class Quit : Action
 
         // Ask for confirmation before quitting
         parserState.CommandComplete();
-        questionController.RequestQuestionResponse("22QuitQuestion", "54OK", "54OK", YesQuit, NoDontQuit);
+        questionController.RequestQuestionResponse("quit");
         return CommandOutcome.QUESTION;
     }
 

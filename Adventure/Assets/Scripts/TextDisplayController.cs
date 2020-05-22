@@ -12,7 +12,10 @@ public class TextDisplayController : MonoBehaviour
 
     [SerializeField] private Text textLogView;                    // Reference to text field that the narrative appears in
     [SerializeField] private ScrollRect scrollView;               // Reference to scrolling view on narrative text
-    public List<string> textLog = new List<string>();            // All the text shown in the narrative is logged here
+    
+    // === PROPERTIES ===
+
+    public List<string> TextLog { get; private set; } = new List<string>();            // All the text shown in the narrative is logged here
 
     // === PUBLIC  METHODS ===
 
@@ -22,25 +25,24 @@ public class TextDisplayController : MonoBehaviour
     {
         if (textToAdd != null && textToAdd != "")
         {
-            textLog.Add(textToAdd);
+            TextLog.Add(textToAdd);
         }
 
-        textLogView.text = string.Join("\n\n", textLog.ToArray()) + "\n";
-
-        //// If mesh is getting too large, cull the oldest log item (it will be removed on next update)
-        //if (textLogView.text. > 200)
-        //{
-        //    textLog.RemoveAt(0);
-        //}
-       
         StartCoroutine(UpdateTextDisplay());
     }
 
     // Clear text display
     public void ResetTextDisplay()
     {
-        textLog.Clear();
+        TextLog.Clear();
         textLogView.text = "";
+        StartCoroutine(UpdateTextDisplay());
+    }
+
+    // Restore TextDisplayController from saved game data
+    public void Restore(GameData gameData)
+    {
+        TextLog = gameData.textLog;
         StartCoroutine(UpdateTextDisplay());
     }
 
@@ -49,6 +51,8 @@ public class TextDisplayController : MonoBehaviour
     // Update text display (should be called after any change)
     private IEnumerator UpdateTextDisplay()
     {
+        textLogView.text = string.Join("\n\n", TextLog.ToArray()) + "\n";
+
         // Wait for the next frame
         yield return null;
 
