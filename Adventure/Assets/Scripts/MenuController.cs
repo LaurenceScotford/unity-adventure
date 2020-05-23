@@ -1,8 +1,8 @@
 ﻿// Menu Controller
 // Manages player actions on the menu
 
+using System.Collections;
 using System.IO;
-using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,6 +12,8 @@ public class MenuController : MonoBehaviour
     // === MEMBER VARIABLES ===
     [SerializeField] private GameObject warningDialogue;
     [SerializeField] private Text warningText;
+    [SerializeField] private GameObject menuPanel;
+    [SerializeField] private Text loadText;
     [SerializeField] private Text[] playerTexts;
     [SerializeField] private Button[] continueButtons;
     [SerializeField] private Button[] newButtons;
@@ -64,7 +66,7 @@ public class MenuController : MonoBehaviour
         PlayerPrefs.SetString("LoadSaveMode", "load");
         PlayerPrefs.SetInt("CurrentPlayer", player);
         PlayerPrefs.SetString("OriginatingScene", "Menu");
-        SceneManager.LoadScene("LoadSaveGame");
+        StartCoroutine(GoToScene("LoadSaveGame"));
     }
 
     // Start a new game
@@ -87,7 +89,7 @@ public class MenuController : MonoBehaviour
     // Start a game
     public void StartGame()
     {
-        SceneManager.LoadScene("Game");
+        StartCoroutine(GoToScene("Game"));
     }
 
     // === PRIVATE METHODS ===
@@ -138,5 +140,29 @@ public class MenuController : MonoBehaviour
         string insertText = PlayerPrefs.GetString("CurrentMode") == "new" ? "start a new game" : "load a game";
         warningText.text = "If you " + insertText + " it will replace your current game.\nDo you want to continue?";
         warningDialogue.SetActive(true);
+    }
+
+    // === COROUTINES ===
+
+    private IEnumerator GoToScene(string sceneName)
+    {
+        menuPanel.SetActive(false);
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+
+        // Wait until the asynchronous scene fully loads
+        while (!asyncLoad.isDone)
+        {
+            string loadMsg = "Loading";
+
+            for (int i = 0; i < asyncLoad.progress * 10; i++)
+            {
+                loadMsg += " .";
+            }
+
+            loadText.text = loadMsg;
+
+            yield return null;
+        }
     }
 }

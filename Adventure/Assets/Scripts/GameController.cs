@@ -1,8 +1,8 @@
 ﻿// Game Controller
 // The master controller that is the entry point for a new game and controls the game sequence
 
+using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -19,9 +19,12 @@ public class GameController : MonoBehaviour
     [SerializeField] private Text warningText;
     [SerializeField] private Button menuButton;
 
+
     // References to other parts of the game engine
     [SerializeField] private PlayerInput playerInput;             
-    [SerializeField] private PlayerMessageController playerMessageController;      
+    [SerializeField] private PlayerMessageController playerMessageController;
+    [SerializeField] private GameObject container;
+    [SerializeField] private Text loadText;
     public CommandsController commandsController;
     public ActionController actionController;
     public TextDisplayController textDisplayController;          
@@ -261,6 +264,17 @@ public class GameController : MonoBehaviour
         EndGame(false);
     }
 
+    // Opens the Load/Save Game Dialogue
+    public void OpenLoadSaveDialogue(string mode)
+    {
+        if (ContinuationSave())
+        {
+            PlayerPrefs.SetString("LoadSaveMode", mode);
+            PlayerPrefs.SetString("OriginatingScene", "Game");
+            StartCoroutine(GoToScene("LoadSaveGame"));
+        }
+    }
+
      // Monitors for a RESUME command and shows a message for any other command (this is the standard processer used acfter the game is over)
     public void PostGameCommand()
     {
@@ -443,7 +457,7 @@ public class GameController : MonoBehaviour
         {
             PlayerPrefs.DeleteKey("CurrentMode");
             PlayerPrefs.DeleteKey("CurrentPlayer");
-            SceneManager.LoadScene("Menu");
+            StartCoroutine(GoToScene("Menu"));
         }
     }
 
@@ -529,7 +543,7 @@ public class GameController : MonoBehaviour
 
         if (wType == SaveLoadType.CONTINUATION_LOAD || wType == SaveLoadType.PLAYER_LOAD)
         {
-            SceneManager.LoadScene("Menu");
+            StartCoroutine(GoToScene("Menu"));
         }
     }
 
@@ -1010,6 +1024,30 @@ public class GameController : MonoBehaviour
         textDisplayController.AddTextToLog(playerMessageController.GetMessage("270Tampered"));
         EndGame(true);
         return false;
+    }
+
+    // === COROUTINES ===
+
+    private IEnumerator GoToScene(string sceneName)
+    {
+        container.SetActive(false);
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+
+        // Wait until the asynchronous scene fully loads
+        while (!asyncLoad.isDone)
+        {
+            string loadMsg = "Loading";
+
+            for (int i = 0; i < asyncLoad.progress * 10; i++)
+            {
+                loadMsg += " .";
+            }
+
+            loadText.text = loadMsg;
+
+            yield return null;
+        }
     }
 }
 

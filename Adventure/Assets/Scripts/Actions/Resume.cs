@@ -78,12 +78,7 @@ public class Resume : Action
     // Handler for yes reponse to resume question - Makes a continuation save first, in case player cancels and wants to resume current game
     public void YesResume()
     {
-        if (gameController.ContinuationSave())
-        {
-            PlayerPrefs.SetString("OriginatingScene", "Game");
-            PlayerPrefs.SetString("LoadSaveMode", "load");
-            SceneManager.LoadScene("LoadSaveGame");
-        }
+        gameController.OpenLoadSaveDialogue("load");
     }
 
     // Handler for no response to resume question

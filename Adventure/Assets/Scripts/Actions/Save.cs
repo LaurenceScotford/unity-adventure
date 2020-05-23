@@ -2,7 +2,7 @@
 // Executes SAVE command
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class Save : Action
 {
@@ -63,12 +63,7 @@ public class Save : Action
     // Handler for the yes reponse to save question - Makes a continuation save first, so player can continue current game after the save completes
     public void YesSave()
     {
-        if (gameController.ContinuationSave())
-        {
-            PlayerPrefs.SetString("OriginatingScene", "Game");
-            PlayerPrefs.SetString("LoadSaveMode", "save");
-            SceneManager.LoadScene("LoadSaveGame");
-        }
+        gameController.OpenLoadSaveDialogue("save");
     }
 
     // === Handler for the no response to save question ===

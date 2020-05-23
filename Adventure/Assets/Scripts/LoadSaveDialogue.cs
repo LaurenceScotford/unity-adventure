@@ -1,6 +1,7 @@
 ﻿// Load Save Dialogue
 // Manages the dialogue to load and save games
 
+using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class LoadSaveDialogue : MonoBehaviour
 {
     // === MEMBER VARIABLES ===
 
+    [SerializeField] private GameObject loadSavePanel;
+    [SerializeField] private Text loadText;
     [SerializeField] private Text heading;
     [SerializeField] private Text loadSaveButton;
     [SerializeField] private Text placeholder;
@@ -69,7 +72,7 @@ public class LoadSaveDialogue : MonoBehaviour
     {
         string originatingScene = PlayerPrefs.GetString("OriginatingScene");
         SetUpPrefs(false);
-        SceneManager.LoadScene(originatingScene);
+        StartCoroutine(GoToScene(originatingScene));
     }
 
     // Save / load action
@@ -78,7 +81,7 @@ public class LoadSaveDialogue : MonoBehaviour
         if (CheckFileName() && (loadSaveMode == "save" || CheckFileExists()))
         {
             SetUpPrefs(true);
-            SceneManager.LoadScene("Game");
+            StartCoroutine(GoToScene("Game"));
         }
     }
 
@@ -136,6 +139,30 @@ public class LoadSaveDialogue : MonoBehaviour
         
         PlayerPrefs.DeleteKey("OriginatingScene");
         PlayerPrefs.DeleteKey("LoadSaveMode");
+    }
+
+    // === COROUTINES ===
+
+    private IEnumerator GoToScene(string sceneName)
+    {
+        loadSavePanel.SetActive(false);
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+
+        // Wait until the asynchronous scene fully loads
+        while (!asyncLoad.isDone)
+        {
+            string loadMsg = "Loading";
+
+            for (int i = 0; i < asyncLoad.progress * 10; i++)
+            {
+                loadMsg += " .";
+            }
+
+            loadText.text = loadMsg;
+
+            yield return null;
+        }
     }
 }
 
