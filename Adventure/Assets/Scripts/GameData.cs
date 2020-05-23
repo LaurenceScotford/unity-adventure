@@ -19,6 +19,8 @@ public class GameData
     public CommandToProcess[] commandsToProcess;
     public string currentLocation;
     public string currentQuestion;
+    public string dataID;
+    public DataType dataType;
     public int detailMsgCount;
     public Dwarf[] dwarves;
     public int dwarvesKilled;
@@ -36,6 +38,7 @@ public class GameData
     public string oldItem;
     public string[] oldLocations;
     public bool panic;
+    public int player;
     public bool reachedEnd;
     public int savePenaltyPoints;
     public string subjectCarriedOver;
@@ -49,8 +52,23 @@ public class GameData
     public bool wasDark;
     public int westCount;
 
-    public GameData(GameController controller)
+    public readonly string characterSet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"; 
+
+    public GameData(GameController controller, DataType dataType)
     {
+        // Add data type
+        this.dataType = dataType;
+
+        // Add code
+        dataID = "";
+        while (dataID.Length < 16)
+        {
+            dataID += characterSet[UnityEngine.Random.Range(0, characterSet.Length)];
+        }
+
+        // Add player
+        player = PlayerPrefs.GetInt("CurrentPlayer");
+
         // Add text display data
         textLog = controller.textDisplayController.TextLog;
 
@@ -123,3 +141,5 @@ public class GameData
         currentQuestion = controller.questionController.CurrentQuestion;
     }
 }
+
+public enum DataType { CONT_DATA, SAVE_DATA };

@@ -85,13 +85,14 @@ public class PersistenceController : MonoBehaviour
         FileStream stream = null;
         bool saveSuccess = true;
         string path = CreateFilePath(filename);
+        GameData data = null;
 
         try
         {
             BinaryFormatter formatter = new BinaryFormatter();
             stream = new FileStream(path, FileMode.Create);
 
-            GameData data = new GameData(gameController);
+            data = new GameData(gameController, filename == null ? DataType.CONT_DATA : DataType.SAVE_DATA);
 
             formatter.Serialize(stream, data);
         }
@@ -106,6 +107,12 @@ public class PersistenceController : MonoBehaviour
             {
                 stream.Close();
             }
+        }
+
+        // If saving was successful and this is a continuation save, store the save ID in player prefs
+        if (filename == null && saveSuccess)
+        {
+            PlayerPrefs.SetString("p" + PlayerPrefs.GetInt("CurrentPlayer"), data.dataID);
         }
 
         return saveSuccess;

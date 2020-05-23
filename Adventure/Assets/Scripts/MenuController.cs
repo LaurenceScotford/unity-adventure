@@ -61,7 +61,7 @@ public class MenuController : MonoBehaviour
     // Opens the load game dialogue
     public void LoadGame(int player)
     {
-        PlayerPrefs.SetString("SaveLoadtMode", "load");
+        PlayerPrefs.SetString("LoadSaveMode", "load");
         PlayerPrefs.SetInt("CurrentPlayer", player);
         PlayerPrefs.SetString("OriginatingScene", "Menu");
         SceneManager.LoadScene("LoadSaveGame");

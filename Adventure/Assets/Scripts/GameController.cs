@@ -799,7 +799,12 @@ public class GameController : MonoBehaviour
         {
             TidyLoadSavePrefs();
             ResumeGame(gameData);
-            RestartGame(gameData);
+
+            // Ensure that the data type loaded was the right type for this load type and was data for this player and, if its a continuation load, it was the correct continuation data for this player...
+            if (GameDataIsValid(gameData, isContinuation))
+            {
+                RestartGame(gameData);
+            }
         } 
         else
         {
@@ -863,16 +868,24 @@ public class GameController : MonoBehaviour
         {
             ResumeGame(gameData);
 
-            // Add the penalty for saving before saving the current game
-            scoreController.AddSavePenalty();
-
-            // Attempt to save the current game
-            if (persistenceController.SaveGame(PlayerPrefs.GetString("CurrentFile")))
+            if (GameDataIsValid(gameData, true))
             {
-                // Save has worked, so remove prefs no longer needed, confirm save to player and then restart game
-                TidyLoadSavePrefs();
-                textDisplayController.AddTextToLog(playerMessageController.GetMessage("266Resume"));
-                RestartGame(gameData);
+                // Add the penalty for saving before saving the current game
+                scoreController.AddSavePenalty();
+
+                // Attempt to save the current game
+                if (persistenceController.SaveGame(PlayerPrefs.GetString("CurrentFile")))
+                {
+                    // Save has worked, so remove prefs no longer needed, confirm save to player and then restart game
+                    TidyLoadSavePrefs();
+                    textDisplayController.AddTextToLog(playerMessageController.GetMessage("266Resume"));
+                    RestartGame(gameData);
+                    return;
+                }
+            }
+            else
+            {
+                // Invalid data will have ended the game, so simply return
                 return;
             }
         }
@@ -982,6 +995,21 @@ public class GameController : MonoBehaviour
         {
             textDisplayController.AddTextToLog(playerMessageController.GetMessage(lampMessage));
         }
+    }
+
+    // Checks if game date is valid and retursn true if it is, if not shows a message, ends the game and returns false.
+    private bool GameDataIsValid(GameData data, bool isContinuation)
+	{
+        int currentPlayer = PlayerPrefs.GetInt("CurrentPlayer");
+        if (data.dataType == (isContinuation? DataType.CONT_DATA : DataType.SAVE_DATA) && (!isContinuation || data.dataID == PlayerPrefs.GetString("p" + currentPlayer)) && (currentPlayer == data.player))
+        {
+            return true;
+        }
+
+        // If not, someone's been caught trying to cheat, so end their game
+        textDisplayController.AddTextToLog(playerMessageController.GetMessage("270Tampered"));
+        EndGame(true);
+        return false;
     }
 }
 
