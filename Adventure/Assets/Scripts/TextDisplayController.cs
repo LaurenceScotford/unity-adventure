@@ -12,10 +12,35 @@ public class TextDisplayController : MonoBehaviour
 
     [SerializeField] private Text textLogView;                    // Reference to text field that the narrative appears in
     [SerializeField] private ScrollRect scrollView;               // Reference to scrolling view on narrative text
-    
+    [SerializeField] private Button fontSmallerButton;
+    [SerializeField] private Button fontLargerButton;
+
+    private readonly int[] fontSizes = { 14, 16, 18, 20, 24, 32, 40, 52, 64, 80 };
+    private int currentFontSizeIndex;
+    private string playerFontSizeKey;
+
     // === PROPERTIES ===
 
     public List<string> TextLog { get; private set; } = new List<string>();            // All the text shown in the narrative is logged here
+
+
+    // MONOBEHAVIOUR METHODS
+    private void Start()
+    {
+        playerFontSizeKey = "p" + PlayerPrefs.GetInt("CurrentPlayer") + "FontSizeIndex";
+
+        if (PlayerPrefs.HasKey(playerFontSizeKey))
+        {
+            currentFontSizeIndex = PlayerPrefs.GetInt(playerFontSizeKey);
+        }
+        else
+        {
+            currentFontSizeIndex = 5;
+            PlayerPrefs.SetInt(playerFontSizeKey, currentFontSizeIndex);
+        }
+
+        SetNewFontSize();
+    }
 
     // === PUBLIC  METHODS ===
 
@@ -29,6 +54,21 @@ public class TextDisplayController : MonoBehaviour
         }
 
         StartCoroutine(UpdateTextDisplay());
+    }
+
+    // Decrease size of text
+    public void AdjustFontSize(bool increasing)
+    {
+        if (increasing && currentFontSizeIndex < fontSizes.Length - 1)
+        {
+            currentFontSizeIndex++;
+        }
+        else if (currentFontSizeIndex > 0)
+        {
+            currentFontSizeIndex--;
+        }
+
+        SetNewFontSize();
     }
 
     // Clear text display
@@ -46,7 +86,19 @@ public class TextDisplayController : MonoBehaviour
         StartCoroutine(UpdateTextDisplay());
     }
 
-    // === PRIVATE METHODS
+    // === PRIVATE METHODS ===
+
+    // Sets a new font size, saves it in player prefs, makes font size buttons avialable or unavailable depending on the current index and refreshes the view
+    private void SetNewFontSize()
+    {
+        textLogView.fontSize = fontSizes[currentFontSizeIndex];
+        PlayerPrefs.SetInt(playerFontSizeKey, currentFontSizeIndex);
+        fontSmallerButton.interactable = currentFontSizeIndex == 0 ? false : true;
+        fontLargerButton.interactable = currentFontSizeIndex == fontSizes.Length - 1 ? false : true;
+        StartCoroutine(UpdateTextDisplay());
+    }
+
+    // === COROUTINES ===
 
     // Update text display (should be called after any change)
     private IEnumerator UpdateTextDisplay()
