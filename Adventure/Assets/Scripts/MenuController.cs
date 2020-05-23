@@ -63,10 +63,20 @@ public class MenuController : MonoBehaviour
     // Opens the load game dialogue
     public void LoadGame(int player)
     {
-        PlayerPrefs.SetString("LoadSaveMode", "load");
+        PlayerPrefs.SetString("CurrentMode", "load");
         PlayerPrefs.SetInt("CurrentPlayer", player);
         PlayerPrefs.SetString("OriginatingScene", "Menu");
-        StartCoroutine(GoToScene("LoadSaveGame"));
+
+        // Show warning if there's an existing game in progress
+        if (PlayerCanContinue(player, true))
+        {
+            ShowWarningPanel();
+        }
+        else
+        {
+            PlayerPrefs.SetString("OriginatingScene", "Menu");
+            StartCoroutine(GoToScene("LoadSaveGame"));
+        }
     }
 
     // Start a new game
@@ -90,6 +100,20 @@ public class MenuController : MonoBehaviour
     public void StartGame()
     {
         StartCoroutine(GoToScene("Game"));
+    }
+
+    // Called when the player confirms the choice on the warning panel
+    public void WarningPanelConfirm()
+    {
+        if (PlayerPrefs.GetString("CurrentMode") == "new")
+        {
+            StartGame();
+        }
+        else
+        {
+            PlayerPrefs.SetString("OriginatingScene", "Menu");
+            StartCoroutine(GoToScene("LoadSaveGame"));
+        }
     }
 
     // === PRIVATE METHODS ===

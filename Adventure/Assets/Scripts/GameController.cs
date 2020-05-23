@@ -269,7 +269,7 @@ public class GameController : MonoBehaviour
     {
         if (ContinuationSave())
         {
-            PlayerPrefs.SetString("LoadSaveMode", mode);
+            PlayerPrefs.SetString("CurrentMode", mode);
             PlayerPrefs.SetString("OriginatingScene", "Game");
             StartCoroutine(GoToScene("LoadSaveGame"));
         }

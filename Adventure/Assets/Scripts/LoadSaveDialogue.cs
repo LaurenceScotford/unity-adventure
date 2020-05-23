@@ -35,7 +35,7 @@ public class LoadSaveDialogue : MonoBehaviour
         anim = prompt.GetComponentInChildren<Animation>();
         prompt.text = "";
         player = PlayerPrefs.GetInt("CurrentPlayer");
-        loadSaveMode = (PlayerPrefs.GetString("LoadSaveMode"));
+        loadSaveMode = (PlayerPrefs.GetString("CurrentMode"));
 
         heading.text = "Player " + player + " Saved Games";
 
@@ -129,16 +129,16 @@ public class LoadSaveDialogue : MonoBehaviour
     {
         if (!success && PlayerPrefs.GetString("OriginatingScene") == "Menu")
         {
-            PlayerPrefs.DeleteKey("CurrentPlayer");
+            PlayerPrefs.DeleteKey("CurrentPlayer"); 
+            PlayerPrefs.DeleteKey("CurrentMode");
         }
         else if (success)
         {
             PlayerPrefs.SetString("CurrentFile", input.text);
-            PlayerPrefs.SetString("CurrentMode", loadSaveMode);
         }
         
         PlayerPrefs.DeleteKey("OriginatingScene");
-        PlayerPrefs.DeleteKey("LoadSaveMode");
+       
     }
 
     // === COROUTINES ===
